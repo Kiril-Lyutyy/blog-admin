@@ -1,47 +1,43 @@
+version: "3.9"
+
 services:
-  db:
-    image: mysql:8.0
-    container_name: blog-admin-db
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  backend:
+    build: ./backend
+    command: npm run dev
     ports:
-      - ${MYSQL_PORT_EXPOSE}:${MYSQL_PORT}
-    volumes:
-      - db_data:/var/lib/mysql
-      - ./init:/docker-entrypoint-initdb.d
+      - "4000:4000"
+    environment:
+      - PORT=4000
     networks:
-      - backend
+      - app-network
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./backend/package.json
 
-  api:
-    build: .
-    container_name: blog-admin-api
-    restart: always
+  frontend:
+    build: ./frontend
     ports:
-      - ${PORT}:${PORT}
-    environment:
-      - NODE_ENV=${NODE_ENV}
-      - MYSQL_HOST=db
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_PORT=${MYSQL_PORT}
-      - PORT=${PORT}
+      - "3000:3000"
+    networks:
+      - app-network
     depends_on:
-      - db
-    volumes:
-      - .:/app
-      - /app/node_modules
-    networks:
       - backend
-    command: npm start
-
-volumes:
-  db_data:
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./frontend/package.json
 
 networks:
-  backend:
-  
+  app-network:
+    driver: bridge

@@ -1,13 +1,36 @@
-version: "3.9"
-
 services:
+  db:
+    image: mysql:8.0
+    container_name: admin-blog-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - ${MYSQL_PORT_EXPOSE}:${MYSQL_PORT}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
   backend:
     build: ./backend
+    container_name: admin-blog-api
     command: npm run dev
     ports:
       - "4000:4000"
     environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_PORT=${MYSQL_PORT}
       - PORT=4000
+    depends_on:
+      - db
     networks:
       - app-network
     develop:
@@ -41,3 +64,6 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  db_data:

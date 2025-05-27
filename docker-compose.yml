@@ -45,6 +45,7 @@ services:
 
   frontend:
     build: ./frontend
+    container_name: admin-blog-client
     ports:
       - "3000:3000"
     networks:

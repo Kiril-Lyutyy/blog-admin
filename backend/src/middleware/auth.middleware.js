@@ -1,6 +1,6 @@
-const { verifyToken } = require('../utils/jwt');
+import { verifyToken } from '../utils/jwt.js';
 
-module.exports = (req, res, next) => {
+export default function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -16,4 +16,4 @@ module.exports = (req, res, next) => {
   } catch {
     return res.status(401).json({ message: 'Invalid token' });
   }
-};
+}

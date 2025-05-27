@@ -1,39 +1,44 @@
-const User = require('../models/user.model');
-const { generateToken } = require('../utils/jwt');
+import {
+  findUserByEmail,
+  createUser,
+  comparePasswords,
+} from '../models/user.model.js';
+import { generateToken } from '../utils/jwt.js';
 
-exports.register = async (req, res) => {
+export const register = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const exists = await User.findOne({ email });
+    const exists = await findUserByEmail(email);
 
     if (exists) {
       return res.status(409).json({ message: 'User already exists' });
     }
 
-    const user = new User({ email, password });
-    await user.save();
+    await createUser(email, password);
     res.status(201).json({ message: 'User registered' });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Registration error' });
   }
 };
 
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await findUserByEmail(email);
 
-    if (!user || !(await user.comparePassword(password))) {
+    if (!user || !(await comparePasswords(password, user.password))) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const token = generateToken({ id: user._id, email: user.email });
+    const token = generateToken({ id: user.id, email: user.email });
     res.json({ token });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Login error' });
   }
 };
 
-exports.profile = async (req, res) => {
+export const profile = async (req, res) => {
   res.json({ message: 'Secure profile data', user: req.user });
 };

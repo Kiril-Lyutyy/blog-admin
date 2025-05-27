@@ -1,10 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { setupSwagger } from './swagger.js';
+import authRoutes from './routes/auth.routes.js';
 
 dotenv.config();
 
-export const app = express();
+const app = express();
+
+setupSwagger(app);
 
 app.use(
   cors({
@@ -14,6 +18,8 @@ app.use(
 );
 
 app.use(express.json());
+
+app.use('/api/auth', authRoutes);
 
 app.get('/api/greeting', (_req, res) => {
   res.status(200).json({ greeting: 'Hello from the backend!' });
@@ -26,3 +32,5 @@ app.use((_req, res) => {
 app.use((_err, _req, res, _next) => {
   res.status(500).json({ message: 'Internal Server Error' });
 });
+
+export default app;

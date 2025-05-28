@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import { setupSwagger } from './swagger.js';
 import authRoutes from './routes/auth.routes.js';
 
@@ -16,6 +17,8 @@ app.use(
     credentials: true,
   }),
 );
+
+app.use(cookieParser());
 
 app.use(express.json());
 

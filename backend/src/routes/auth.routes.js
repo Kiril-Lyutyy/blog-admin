@@ -136,4 +136,31 @@ router.post('/login', authController.login);
  */
 router.get('/profile', authMiddleware, authController.profile);
 
+/**
+ * @swagger
+ * /api/auth/refresh:
+ *   post:
+ *     summary: Refresh access token using refresh token
+ *     tags: [Auth]
+ *     cookies:
+ *       refreshToken:
+ *         description: Refresh token stored in HTTP-only cookie
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: New access token issued
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *       401:
+ *         description: Invalid or expired refresh token
+ */
+router.post('/refresh', authController.refresh);
+
 export default router;

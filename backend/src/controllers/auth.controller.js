@@ -1,9 +1,16 @@
+import crypto from 'node:crypto';
 import {
   findUserByEmail,
   createUser,
   comparePasswords,
+  findUserById,
+  saveRefreshToken,
 } from '../models/user.model.js';
 import { generateToken } from '../utils/jwt.js';
+
+export const generateRefreshToken = async () => {
+  return crypto.randomBytes(40).toString('hex');
+};
 
 export const register = async (req, res) => {
   try {
@@ -31,8 +38,19 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const token = generateToken({ id: user.id, email: user.email });
-    res.json({ token });
+    const accessToken = generateToken({ id: user.id, email: user.email });
+    const refreshToken = await generateRefreshToken(); // <-- добавляем это
+
+    await saveRefreshToken(refreshToken, user.id);
+
+    res
+      .cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      })
+      .json({ token: accessToken });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Login error' });
@@ -41,4 +59,26 @@ export const login = async (req, res) => {
 
 export const profile = async (req, res) => {
   res.json({ message: 'Secure profile data', user: req.user });
+};
+
+export const refresh = async (req, res) => {
+  const { refreshToken } = req.cookies;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: 'No refresh token' });
+  }
+
+  const userId = await findUserIdByRefreshToken(refreshToken);
+
+  if (!userId) {
+    return res.status(401).json({ message: 'Invalid refresh token' });
+  }
+
+  const user = await findUserById(userId);
+
+  if (!user) return res.status(401).json({ message: 'User not found' });
+
+  const newAccessToken = generateToken({ id: user.id, email: user.email });
+
+  res.json({ token: newAccessToken });
 };

@@ -142,11 +142,13 @@ router.get('/profile', authMiddleware, authController.profile);
  *   post:
  *     summary: Refresh access token using refresh token
  *     tags: [Auth]
- *     cookies:
- *       refreshToken:
- *         description: Refresh token stored in HTTP-only cookie
+ *     parameters:
+ *       - in: cookie
+ *         name: refreshToken
  *         required: true
- *         type: string
+ *         schema:
+ *           type: string
+ *         description: Refresh token stored in HTTP-only cookie
  *     responses:
  *       200:
  *         description: New access token issued

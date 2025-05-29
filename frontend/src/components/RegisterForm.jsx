@@ -1,16 +1,19 @@
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import api from '../client';
 
 const RegisterForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     try {
-      await api.post('/auth/register', { email, password });
+      await api.post('/auth/register', data);
       navigate('/login');
     } catch (err) {
       console.error(err);
@@ -19,26 +22,66 @@ const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleRegister}>
-      <h2>Register</h2>
-      <input
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        required
+    <Box
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{
+        maxWidth: 400,
+        margin: 'auto',
+        mt: 8,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+      }}
+    >
+      <Typography variant="h4" align="center">
+        Register
+      </Typography>
+
+      <TextField
+        label="Email"
+        variant="outlined"
+        fullWidth
+        error={!!errors.email}
+        helperText={errors.email?.message}
+        {...register('email', {
+          required: 'Email is required',
+          pattern: {
+            value: /^\S+@\S+$/i,
+            message: 'Invalid email address',
+          },
+        })}
       />
-      <input
+
+      <TextField
+        label="Password"
+        variant="outlined"
         type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        required
+        fullWidth
+        error={!!errors.password}
+        helperText={errors.password?.message}
+        {...register('password', {
+          required: 'Password is required',
+          minLength: {
+            value: 6,
+            message: 'Password must be at least 6 characters',
+          },
+        })}
       />
-      <button type="submit">Register</button>
-      <p>
+
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        disabled={isSubmitting}
+      >
+        Register
+      </Button>
+
+      <Typography variant="body2" align="center">
         Already have an account? <Link to="/login">Login</Link>
-      </p>
-    </form>
+      </Typography>
+    </Box>
   );
 };
 

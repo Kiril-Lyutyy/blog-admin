@@ -1,25 +1,26 @@
-import crypto from 'node:crypto';
+import { v4 as uuidv4 } from 'uuid';
 import {
   findUserByEmail,
   createUser,
   comparePasswords,
   findUserById,
   saveRefreshToken,
+  findUserIdByRefreshToken,
+  deleteRefreshToken,
+  findUserByIdWithRole,
 } from '../models/user.model.js';
 import { generateToken } from '../utils/jwt.js';
+import { getPermissionsByRoleId } from '../models/permission.model.js';
 
 export const generateRefreshToken = async () => {
-  return crypto.randomBytes(40).toString('hex');
+  return uuidv4();
 };
 
 export const register = async (req, res) => {
   try {
     const { email, password } = req.body;
     const exists = await findUserByEmail(email);
-
-    if (exists) {
-      return res.status(409).json({ message: 'User already exists' });
-    }
+    if (exists) return res.status(409).json({ message: 'User already exists' });
 
     await createUser(email, password);
     res.status(201).json({ message: 'User registered' });
@@ -38,8 +39,14 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const accessToken = generateToken({ id: user.id, email: user.email });
-    const refreshToken = await generateRefreshToken(); // <-- добавляем это
+    const permissions = await getPermissionsByRoleId(user.role_id);
+    const accessToken = generateToken({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      permissions,
+    });
+    const refreshToken = await generateRefreshToken();
 
     await saveRefreshToken(refreshToken, user.id);
 
@@ -71,14 +78,56 @@ export const refresh = async (req, res) => {
   const userId = await findUserIdByRefreshToken(refreshToken);
 
   if (!userId) {
+    console.warn(`Stolen or reused refresh token: ${refreshToken}`);
+    res.clearCookie('refreshToken');
     return res.status(401).json({ message: 'Invalid refresh token' });
   }
 
   const user = await findUserById(userId);
-
   if (!user) return res.status(401).json({ message: 'User not found' });
 
-  const newAccessToken = generateToken({ id: user.id, email: user.email });
+  await deleteRefreshToken(refreshToken); // удалим старый
 
-  res.json({ token: newAccessToken });
+  const newAccessToken = generateToken({ id: user.id, email: user.email });
+  const newRefreshToken = await generateRefreshToken();
+  await saveRefreshToken(newRefreshToken, user.id);
+
+  res
+    .cookie('refreshToken', newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    })
+    .json({ token: newAccessToken });
+};
+
+export const logout = async (req, res) => {
+  const { refreshToken } = req.cookies;
+
+  if (refreshToken) {
+    await deleteRefreshToken(refreshToken);
+  }
+
+  res.clearCookie('refreshToken').json({ message: 'Logged out successfully' });
+};
+
+export const me = async (req, res) => {
+  try {
+    const user = await findUserByIdWithRole(req.user.id);
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const permissions = await getPermissionsByRoleId(user.role_id);
+
+    res.json({
+      id: user.id,
+      email: user.email,
+      role: user.role_name,
+      permissions,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to fetch user info' });
+  }
 };

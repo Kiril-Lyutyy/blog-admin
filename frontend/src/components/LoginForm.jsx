@@ -1,0 +1,69 @@
+import React, { useState } from 'react';
+
+export default function LoginForm({ onLogin }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      setError('');
+
+      const res = await fetch('http://localhost:4000/api/auth/login', {
+        method: 'POST',
+        credentials: 'include', // (refresh token)
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || 'Login failed');
+      }
+
+      const data = await res.json();
+
+      // Сохраняем access token
+      localStorage.setItem('token', data.token);
+
+      // Уведомляем App, что пользователь залогинен
+      onLogin();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <h2>Login</h2>
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      <div>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
+
+      <div>
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+  );
+}

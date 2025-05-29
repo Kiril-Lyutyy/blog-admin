@@ -51,3 +51,11 @@ WHERE
   (r.name = 'admin') OR
   (r.name = 'editor' AND p.name IN ('edit_posts', 'view_posts')) OR
   (r.name = 'viewer' AND p.name = 'view_posts');
+
+-- Create a default admin user, email: 'admin@example.com', password: 'admin123'
+INSERT INTO users (email, password, role_id)
+VALUES (
+  'admin@example.com',
+  '$2b$10$vq3r0I5PA.GgrYSqyo12ye5LPYLQH79j7oB/AgYvqV.4MP.2zgdfy',
+  (SELECT id FROM roles WHERE name = 'admin')
+);

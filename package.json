@@ -9,7 +9,8 @@
     "format:backend": "prettier --write backend/**/*.{js,json}",
     "lint:backend": "eslint backend",
     "format:frontend": "prettier --write frontend/**/*.{js,jsx,json}",
-    "prepare": "husky"
+    "prepare": "husky",
+    "commit": "cz"
   },
   "lint-staged": {
     "backend/**/*.{js,ts,json}": [
@@ -20,10 +21,19 @@
       "npm run format:frontend"
     ]
   },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.27.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.0.0",

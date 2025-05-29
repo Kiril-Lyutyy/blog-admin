@@ -177,4 +177,35 @@ router.post('/refresh', authController.refresh);
  */
 router.post('/logout', authController.logout);
 
+/**
+ * @swagger
+ * /api/auth/me:
+ *   get:
+ *     summary: Get current user info (after login)
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Current user info
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 email:
+ *                   type: string
+ *                 role:
+ *                   type: string
+ *                 permissions:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *       401:
+ *         description: Invalid or missing token
+ */
+router.get('/me', authMiddleware, authController.me);
+
 export default router;

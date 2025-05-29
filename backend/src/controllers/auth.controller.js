@@ -7,8 +7,10 @@ import {
   saveRefreshToken,
   findUserIdByRefreshToken,
   deleteRefreshToken,
+  findUserByIdWithRole,
 } from '../models/user.model.js';
 import { generateToken } from '../utils/jwt.js';
+import { getPermissionsByRoleId } from '../models/permission.model.js';
 
 export const generateRefreshToken = async () => {
   return uuidv4();
@@ -37,7 +39,13 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const accessToken = generateToken({ id: user.id, email: user.email });
+    const permissions = await getPermissionsByRoleId(user.role_id);
+    const accessToken = generateToken({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      permissions,
+    });
     const refreshToken = await generateRefreshToken();
 
     await saveRefreshToken(refreshToken, user.id);
@@ -102,4 +110,24 @@ export const logout = async (req, res) => {
   }
 
   res.clearCookie('refreshToken').json({ message: 'Logged out successfully' });
+};
+
+export const me = async (req, res) => {
+  try {
+    const user = await findUserByIdWithRole(req.user.id);
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const permissions = await getPermissionsByRoleId(user.role_id);
+
+    res.json({
+      id: user.id,
+      email: user.email,
+      role: user.role_name,
+      permissions,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to fetch user info' });
+  }
 };

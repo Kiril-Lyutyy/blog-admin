@@ -1,4 +1,3 @@
-// src/hooks/useAuth.js
 import { useEffect, useState } from 'react';
 
 export default function useAuth() {
@@ -13,7 +12,10 @@ export default function useAuth() {
       },
     })
       .then((res) => {
-        if (!res.ok) throw new Error('Not authenticated');
+        if (!res.ok) {
+          throw new Error('Not authenticated');
+        }
+
         return res.json();
       })
       .then((data) => {

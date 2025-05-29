@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function LoginForm({ onLogin }) {
+export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,7 +15,7 @@ export default function LoginForm({ onLogin }) {
 
       const res = await fetch('http://localhost:4000/api/auth/login', {
         method: 'POST',
-        credentials: 'include', // (refresh token)
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -27,11 +29,9 @@ export default function LoginForm({ onLogin }) {
 
       const data = await res.json();
 
-      // Сохраняем access token
       localStorage.setItem('token', data.token);
 
-      // Уведомляем App, что пользователь залогинен
-      onLogin();
+      navigate('/');
     } catch (err) {
       setError(err.message);
     }

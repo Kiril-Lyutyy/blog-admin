@@ -165,4 +165,16 @@ router.get('/profile', authMiddleware, authController.profile);
  */
 router.post('/refresh', authController.refresh);
 
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Logout user (invalidate refresh token)
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Logged out
+ */
+router.post('/logout', authController.logout);
+
 export default router;

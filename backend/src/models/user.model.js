@@ -48,3 +48,8 @@ export async function findUserIdByRefreshToken(token) {
 export async function deleteRefreshToken(token) {
   await pool.query('DELETE FROM refresh_tokens WHERE token = ?', [token]);
 }
+
+// not used
+// export async function deleteAllRefreshTokensForUser(userId) {
+//   await pool.query('DELETE FROM refresh_tokens WHERE user_id = ?', [userId]);
+// }

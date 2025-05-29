@@ -1,36 +1,43 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate, Link } from 'react-router-dom';
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Alert,
+  Stack,
+} from '@mui/material';
 
 export default function LoginForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const navigate = useNavigate();
+  const [error, setError] = React.useState('');
+
+  const onSubmit = async (data) => {
+    setError('');
 
     try {
-      setError('');
-
       const res = await fetch('http://localhost:4000/api/auth/login', {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.message || 'Login failed');
+        const result = await res.json();
+        throw new Error(result.message || 'Login failed');
       }
 
-      const data = await res.json();
-
-      localStorage.setItem('token', data.token);
-
+      const result = await res.json();
+      localStorage.setItem('token', result.token);
       navigate('/');
     } catch (err) {
       setError(err.message);
@@ -38,32 +45,80 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
+    <Box
+      maxWidth={400}
+      mx="auto"
+      mt={8}
+      p={4}
+      borderRadius={2}
+      boxShadow={3}
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+    >
+      <Typography variant="h4" mb={3} align="center">
+        Login
+      </Typography>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
 
-      <div>
-        <input
+      <Stack spacing={2}>
+        <TextField
+          label="Email"
           type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
+          {...register('email', {
+            required: 'Email is required',
+            pattern: {
+              value: /^\S+@\S+$/i,
+              message: 'Invalid email address',
+            },
+          })}
+          error={!!errors.email}
+          helperText={errors.email?.message}
+          fullWidth
+          autoFocus
         />
-      </div>
 
-      <div>
-        <input
+        <TextField
+          label="Password"
           type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+          {...register('password', {
+            required: 'Password is required',
+            minLength: {
+              value: 6,
+              message: 'Password must be at least 6 characters',
+            },
+          })}
+          error={!!errors.password}
+          helperText={errors.password?.message}
+          fullWidth
         />
-      </div>
 
-      <button type="submit">Login</button>
-    </form>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={isSubmitting}
+          fullWidth
+          size="large"
+        >
+          {isSubmitting ? 'Logging in...' : 'Login'}
+        </Button>
+
+        <Typography variant="body2" align="center">
+          Don't have an account?{' '}
+          <Link
+            to="/register"
+            style={{ textDecoration: 'none', color: '#1976d2' }}
+          >
+            Register here
+          </Link>
+        </Typography>
+      </Stack>
+    </Box>
   );
 }

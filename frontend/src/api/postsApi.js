@@ -1,4 +1,4 @@
-import api from './apiClient';
+import api from './config';
 
 export const getPosts = () => api.get('/posts');
 export const getPostById = (id) => api.get(`/posts/${id}`);

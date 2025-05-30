@@ -1,4 +1,4 @@
-import api from './apiClient';
+import api from './config';
 
 export const getUsers = () => api.get('/users');
 export const getUserById = (id) => api.get(`/users/${id}`);

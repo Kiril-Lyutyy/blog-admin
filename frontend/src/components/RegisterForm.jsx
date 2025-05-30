@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
-import { Box, Button, TextField, Typography } from '@mui/material';
-import api from '../client';
+import { Box, Button, TextField, Typography, Alert } from '@mui/material';
+import { register as registerUser } from '../api/authApi';
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -11,13 +12,18 @@ const RegisterForm = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const [error, setError] = useState('');
+
   const onSubmit = async (data) => {
+    setError('');
+
     try {
-      await api.post('/auth/register', data);
+      await registerUser(data);
       navigate('/login');
     } catch (err) {
-      console.error(err);
-      alert('Registration failed');
+      const message =
+        err.response?.data?.message || err.message || 'Registration failed';
+      setError(message);
     }
   };
 
@@ -37,6 +43,8 @@ const RegisterForm = () => {
       <Typography variant="h4" align="center">
         Register
       </Typography>
+
+      {error && <Alert severity="error">{error}</Alert>}
 
       <TextField
         label="Email"
@@ -75,7 +83,7 @@ const RegisterForm = () => {
         color="primary"
         disabled={isSubmitting}
       >
-        Register
+        {isSubmitting ? 'Registering...' : 'Register'}
       </Button>
 
       <Typography variant="body2" align="center">

@@ -1,12 +1,15 @@
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+// src/components/Navbar.jsx
+import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
 
-const Navbar = ({ user, onLogout }) => {
+const Navbar = () => {
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    onLogout();
-    navigate('/login');
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login', { replace: true });
   };
 
   return (

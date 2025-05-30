@@ -1,29 +1,43 @@
 import { useEffect, useState } from 'react';
+import { getProfile } from '../api/authApi';
 
-export default function useAuth() {
+const useAuth = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch('http://localhost:4000/api/auth/me', {
-      credentials: 'include',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Not authenticated');
-        }
+  const loadUser = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
-        return res.json();
-      })
-      .then((data) => {
-        setUser(data);
-      })
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
+    try {
+      const res = await getProfile();
+      setUser(res.data);
+    } catch {
+      localStorage.removeItem('token');
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadUser();
   }, []);
 
-  return { user, loading };
-}
+  const loginUser = async (token) => {
+    localStorage.setItem('token', token);
+    await loadUser();
+  };
+
+  const logout = async () => {
+    localStorage.removeItem('token');
+    setUser(null);
+  };
+
+  return { user, loading, loginUser, logout };
+};
+
+export default useAuth;

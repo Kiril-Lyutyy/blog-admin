@@ -1,7 +1,10 @@
-import React from 'react';
 import { Typography, Box } from '@mui/material';
 
 const UserProfile = ({ user }) => {
+  if (!user) {
+    return null;
+  }
+
   return (
     <Box>
       <Typography variant="h4" mb={3}>

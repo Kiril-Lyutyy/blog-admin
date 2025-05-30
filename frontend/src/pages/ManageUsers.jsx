@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import {
   Typography,
   Table,
@@ -7,7 +8,6 @@ import {
   TableBody,
   CircularProgress,
   Alert,
-  IconButton,
   Select,
   MenuItem,
   TextField,
@@ -16,12 +16,11 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  FormHelperText,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import useManageUsers from '../hooks/useManageUsers';
 import { ROLE_OPTIONS } from '../constants/roles';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -40,7 +39,13 @@ const ManageUsers = () => {
 
   // Handle Role change (immediate update)
   const handleRoleChange = (id, newRoleId) => {
-    patchUser(id, { role_id: newRoleId });
+    patchUser(id, { role_id: newRoleId })
+      .then(() => {
+        toast.success('User role updated successfully!');
+      })
+      .catch((err) => {
+        toast.error(`Failed to update user role: ${err.message}`);
+      });
   };
 
   // Handle email input change, update state, debounce API call
@@ -72,7 +77,13 @@ const ManageUsers = () => {
           : '';
 
       if (!emailError) {
-        patchUser(id, { email: newEmail });
+        patchUser(id, { email: newEmail })
+          .then(() => {
+            toast.success('User email updated successfully!');
+          })
+          .catch((err) => {
+            toast.error(`Failed to update user email: ${err.message}`);
+          });
       }
     }, 1000);
   };
@@ -87,6 +98,7 @@ const ManageUsers = () => {
   const confirmDelete = () => {
     deleteUser(deleteConfirm.userId);
     closeDeleteConfirm();
+    toast.success('User deleted successfully!');
   };
 
   if (loading) return <CircularProgress />;
@@ -156,15 +168,17 @@ const ManageUsers = () => {
 
       {/* Delete confirmation modal */}
       <Dialog open={deleteConfirm.open} onClose={closeDeleteConfirm}>
-        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogTitle fontSize={18}>Confirm Deletion</DialogTitle>
         <DialogContent>
-          Are you sure you want to delete this user?
+          <Typography variant="body1" gutterBottom>
+            Are you sure you want to delete this user?
+          </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDeleteConfirm} color="primary">
             Cancel
           </Button>
-          <Button onClick={confirmDelete} color="error" variant="contained">
+          <Button onClick={confirmDelete} color="primary" variant="contained">
             Delete
           </Button>
         </DialogActions>

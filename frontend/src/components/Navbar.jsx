@@ -25,8 +25,8 @@ const Navbar = () => {
     <AppBar position="static" sx={{ mb: 3 }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box display="flex" alignItems="center">
-          <Typography variant="h1" component="div" sx={{ marginRight: 1 }}>
-            Cat's Blog
+          <Typography variant="h2" component="div" sx={{ marginRight: 1 }}>
+            Black Cat's Blog
           </Typography>
 
           <Box sx={{ width: '60px' }}>

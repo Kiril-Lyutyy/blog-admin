@@ -35,12 +35,20 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
+          padding: '8px 16px',
           fontSize: 14,
           textTransform: 'none',
           color: '#FFD700', // default text color (yellow)
           '&:hover': {
             backgroundColor: '#38761d',
             color: '#FAEC54', // lighter yellow on hover
+          },
+        },
+        containedPrimary: {
+          backgroundColor: '#FF3C00',
+          color: '#FFF8DC',
+          '&:hover': {
+            backgroundColor: '#cc3100',
           },
         },
       },

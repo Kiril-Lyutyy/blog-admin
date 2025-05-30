@@ -69,3 +69,19 @@ VALUES (
   '$2b$10$vq3r0I5PA.GgrYSqyo12ye5LPYLQH79j7oB/AgYvqV.4MP.2zgdfy',
   (SELECT id FROM roles WHERE name = 'admin')
 );
+
+-- Insert test editor user, email: editor@example.com, password: editor123
+INSERT INTO users (email, password, role_id)
+VALUES (
+  'editor@example.com',
+  '$2b$10$pt8f7DlDnJe5q/hcQzEf/.pRmyUz4IBqwxHTmfUk44j7oBrPAeVmC', -- hashed 'editor123'
+  (SELECT id FROM roles WHERE name = 'editor')
+);
+
+-- Insert test viewer user, email: viewer@example.com, password: viewer123
+INSERT INTO users (email, password, role_id)
+VALUES (
+  'viewer@example.com',
+  '$2b$10$nQyLUTLdk1Rj4l82QqgDS.Ffhh4KUzydFD6TDfG5U1cRZr6XZgyDK', -- hashed 'viewer123'
+  (SELECT id FROM roles WHERE name = 'viewer')
+);

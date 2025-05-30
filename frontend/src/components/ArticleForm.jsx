@@ -3,7 +3,7 @@ import { Typography, TextField, Button, Box } from '@mui/material';
 const ArticleForm = () => {
   return (
     <Box component="form" sx={{ maxWidth: 600 }}>
-      <Typography variant="h4" mb={3}>
+      <Typography variant="h3" mb={3}>
         Create / Edit Article
       </Typography>
 

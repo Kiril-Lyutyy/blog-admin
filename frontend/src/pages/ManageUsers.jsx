@@ -94,7 +94,7 @@ const ManageUsers = () => {
 
   return (
     <div>
-      <Typography variant="h4" mb={3}>
+      <Typography variant="h3" mb={3}>
         Manage Users
       </Typography>
 
@@ -138,12 +138,15 @@ const ManageUsers = () => {
                 </TableCell>
 
                 <TableCell>
-                  <IconButton
-                    color="error"
+                  <Button
+                    endIcon={<DeleteIcon />}
                     onClick={() => openDeleteConfirm(user.id)}
+                    variant="contained"
+                    color="primary"
+                    size="small"
                   >
-                    <DeleteIcon />
-                  </IconButton>
+                    Delete
+                  </Button>
                 </TableCell>
               </TableRow>
             );

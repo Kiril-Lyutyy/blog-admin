@@ -1,8 +1,7 @@
-// components/PageLayout.js
-import React from 'react';
+import { Outlet } from 'react-router-dom';
+import { Box, Container } from '@mui/material';
 import Navbar from './Navbar';
 import useAuth from '../hooks/useAuth';
-import { Outlet } from 'react-router-dom';
 
 const PageLayout = () => {
   const { user, logout } = useAuth();
@@ -10,9 +9,9 @@ const PageLayout = () => {
   return (
     <>
       {user && <Navbar user={user} onLogout={logout} />}
-      <main>
+      <Container maxWidth="lg" sx={{ pt: 3 }}>
         <Outlet />
-      </main>
+      </Container>
     </>
   );
 };

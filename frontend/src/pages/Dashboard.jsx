@@ -5,7 +5,7 @@ import { mockPosts } from '../mocks/mockData.js';
 const Home = () => {
   return (
     <div>
-      <Typography variant="h4" mb={3}>
+      <Typography variant="h3" mb={3}>
         Blog Posts
       </Typography>
 

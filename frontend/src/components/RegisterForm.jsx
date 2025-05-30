@@ -40,7 +40,7 @@ const RegisterForm = () => {
         gap: 2,
       }}
     >
-      <Typography variant="h4" align="center">
+      <Typography variant="h3" align="center">
         Register
       </Typography>
 

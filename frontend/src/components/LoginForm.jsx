@@ -49,7 +49,7 @@ export default function LoginForm() {
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
-      <Typography variant="h4" mb={3} align="center">
+      <Typography variant="h3" mb={3} align="center">
         Login
       </Typography>
 

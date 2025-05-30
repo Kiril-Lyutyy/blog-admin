@@ -5,6 +5,7 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  patchUser,
 } from '../controllers/manageUsers.controller.js';
 
 const router = Router();
@@ -126,5 +127,34 @@ router.put('/:id', updateUser);
  *         description: User not found
  */
 router.delete('/:id', deleteUser);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   patch:
+ *     summary: Partially update a user's email or role
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID of the user to patch
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserPatchInput'
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       400:
+ *         description: Invalid input
+ *       404:
+ *         description: User not found
+ */
+router.patch('/:id', patchUser);
 
 export default router;

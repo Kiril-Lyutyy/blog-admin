@@ -1,4 +1,3 @@
-// routes/index.js
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
@@ -26,11 +25,22 @@ const AppRoutes = () => {
       >
         <Route path="/" element={<Dashboard />} />
         <Route path="/profile" element={<UserProfile />} />
-        <Route path="/articles/new" element={<ArticleForm />} />
+
+        {/* New Article requires 'edit_posts' permission */}
+        <Route
+          path="/articles/new"
+          element={
+            <RequireAuth permission="edit_posts">
+              <ArticleForm />
+            </RequireAuth>
+          }
+        />
+
+        {/* Manage Users requires 'manage_users' permission */}
         <Route
           path="/manage-users"
           element={
-            <RequireAuth>
+            <RequireAuth permission="manage_users">
               <ManageUsers />
             </RequireAuth>
           }

@@ -4,6 +4,7 @@ import {
   insertUser,
   updateUserById,
   deleteUserById,
+  patchUserById,
 } from '../models/manageUsers.model.js';
 
 export const getUsers = async (req, res) => {
@@ -66,5 +67,32 @@ export const deleteUser = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Failed to delete user' });
+  }
+};
+
+export const patchUser = async (req, res) => {
+  const { id } = req.params;
+  const { email, role_id } = req.body;
+
+  const fields = {};
+  if (typeof email === 'string') fields.email = email;
+  if (typeof role_id === 'number') fields.role_id = role_id;
+
+  if (Object.keys(fields).length === 0) {
+    return res.status(400).json({ message: 'No valid fields to update' });
+  }
+
+  try {
+    const updated = await patchUserById(id, fields);
+    if (!updated) {
+      return res
+        .status(404)
+        .json({ message: 'User not found or no changes made' });
+    }
+
+    res.json({ message: 'User updated successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to update user' });
   }
 };

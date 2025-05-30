@@ -1,11 +1,10 @@
-// hooks/useManageUsers.jsx
 import { useEffect, useState } from 'react';
 import {
   getUsers,
-  getUserById,
   createUser,
   updateUser,
   deleteUser,
+  patchUser,
 } from '../api/manageUsersApi';
 
 const useManageUsers = () => {
@@ -44,6 +43,15 @@ const useManageUsers = () => {
     }
   };
 
+  const handlePatchUser = async (id, updates) => {
+    try {
+      await patchUser(id, updates);
+      await fetchUsers();
+    } catch (err) {
+      setError(err.message || 'Failed to update user');
+    }
+  };
+
   const handleDelete = async (id) => {
     try {
       await deleteUser(id);
@@ -65,6 +73,7 @@ const useManageUsers = () => {
     createUser: handleCreate,
     updateUser: handleUpdate,
     deleteUser: handleDelete,
+    patchUser: handlePatchUser,
   };
 };
 

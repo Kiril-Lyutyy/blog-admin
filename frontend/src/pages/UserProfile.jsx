@@ -1,13 +1,16 @@
 import { Typography, Box } from '@mui/material';
+import useAuth from '../hooks/useAuth';
 
-const UserProfile = ({ user }) => {
+const UserProfile = () => {
+  const { user } = useAuth();
+
   if (!user) {
     return null;
   }
 
   return (
     <Box>
-      <Typography variant="h4" mb={3}>
+      <Typography variant="h3" mb={3}>
         User Profile
       </Typography>
       <Typography>Email: {user.email}</Typography>

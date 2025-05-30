@@ -139,6 +139,7 @@ const ManageUsers = () => {
                   <Select
                     value={user.role_id}
                     size="small"
+                    sx={{ minWidth: 160 }}
                     onChange={(e) => handleRoleChange(user.id, e.target.value)}
                   >
                     {ROLE_OPTIONS.map((role) => (

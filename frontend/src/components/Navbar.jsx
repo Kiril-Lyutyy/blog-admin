@@ -3,11 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import LogoIcon from '../components/LogoIcon';
 
-import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
+import ForumIcon from '@mui/icons-material/Forum';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -39,9 +39,9 @@ const Navbar = () => {
             color="inherit"
             component={Link}
             to="/"
-            startIcon={<HomeIcon />}
+            startIcon={<ForumIcon />}
           >
-            Home
+            Blog
           </Button>
           <Typography color="#38761d">•</Typography>
 

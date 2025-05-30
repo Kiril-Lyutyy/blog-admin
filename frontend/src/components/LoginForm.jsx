@@ -9,6 +9,8 @@ import {
   Alert,
   Stack,
 } from '@mui/material';
+import useAuth from '../hooks/useAuth';
+import { login } from '../api/authApi';
 
 export default function LoginForm() {
   const {
@@ -16,31 +18,22 @@ export default function LoginForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
-
+  const { loginUser } = useAuth();
   const navigate = useNavigate();
+
   const [error, setError] = React.useState('');
 
   const onSubmit = async (data) => {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:4000/api/auth/login', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-
-      if (!res.ok) {
-        const result = await res.json();
-        throw new Error(result.message || 'Login failed');
-      }
-
-      const result = await res.json();
-      localStorage.setItem('token', result.token);
-      navigate('/');
+      const res = await login(data);
+      await loginUser(res.data.token);
+      navigate('/', { replace: true });
     } catch (err) {
-      setError(err.message);
+      const message =
+        err.response?.data?.message || err.message || 'Login failed';
+      setError(message);
     }
   };
 

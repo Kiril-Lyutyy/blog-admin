@@ -86,7 +86,7 @@ export const refresh = async (req, res) => {
   const user = await findUserById(userId);
   if (!user) return res.status(401).json({ message: 'User not found' });
 
-  await deleteRefreshToken(refreshToken); // удалим старый
+  await deleteRefreshToken(refreshToken);
 
   const newAccessToken = generateToken({ id: user.id, email: user.email });
   const newRefreshToken = await generateRefreshToken();

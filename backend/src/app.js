@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import { setupSwagger } from './swagger.js';
 import authRoutes from './routes/auth.routes.js';
+import userRoutes from './routes/user.routes.js';
+import postRoutes from './routes/post.routes.js';
 
 dotenv.config();
 
@@ -23,10 +25,8 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
-
-app.get('/api/greeting', (_req, res) => {
-  res.status(200).json({ greeting: 'Hello from the backend!' });
-});
+app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ message: 'Not found' });

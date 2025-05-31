@@ -1,10 +1,13 @@
-import { Typography, TextField, Button, Box } from '@mui/material';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Typography, TextField, Button, Box } from '@mui/material';
 import usePosts from '../hooks/usePosts';
 import useAuth from '../hooks/useAuth';
 
 const ArticleForm = () => {
   const { createPost } = usePosts();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -18,7 +21,14 @@ const ArticleForm = () => {
       title,
       content,
       author_id: user.id,
-    });
+    })
+      .then(() => {
+        toast.success('Post created successfully!');
+        navigate('/', { replace: true });
+      })
+      .catch((err) => {
+        toast.error(`Failed to create post: ${err.message}`);
+      });
 
     setTitle('');
     setContent('');

@@ -78,7 +78,7 @@ const Navbar = () => {
               <StyledNavButton
                 icon={<PostAddIcon />}
                 to="/articles/new"
-                text="New Article"
+                text="Create Post"
               />
             </>
           )}

@@ -8,6 +8,7 @@ import ManageUsers from '../pages/ManageUsers';
 import RequireAuth from '../components/RequireAuth';
 import PageLayout from '../components/PageLayout';
 import PostDetails from '../pages/PostDetails';
+import EditPost from '../pages/EditPost'; // Assuming you have this component
 
 const AppRoutes = () => {
   return (
@@ -34,6 +35,16 @@ const AppRoutes = () => {
           element={
             <RequireAuth permission="edit_posts">
               <ArticleForm />
+            </RequireAuth>
+          }
+        />
+
+        {/* Edit Post requires 'edit_posts' permission */}
+        <Route
+          path="/posts/:id/edit"
+          element={
+            <RequireAuth permission="edit_posts">
+              <EditPost />
             </RequireAuth>
           }
         />

@@ -15,7 +15,6 @@ export const getPosts = async (req, res) => {
     const order = req.query.order || 'desc';
 
     const { posts, total } = await findAllPosts({ page, limit, sort, order });
-
     res.json({ posts, totalCount: total });
   } catch (err) {
     console.error(err);
@@ -53,8 +52,33 @@ export const createPost = async (req, res) => {
 
 export const updatePost = async (req, res) => {
   try {
-    const updated = await updatePostById(req.params.id, req.body);
-    if (!updated) return res.status(404).json({ message: 'Post not found' });
+    const postId = req.params.id;
+    const userId = req.user.id;
+    const userPermissions = req.user.permissions || [];
+
+    // Find the post first to check author
+    const post = await findPostById(postId);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+
+    // Check ownership
+    if (post.author_id !== userId) {
+      return res
+        .status(403)
+        .json({ message: 'You can only edit your own posts' });
+    }
+
+    // Check permission
+    if (!userPermissions.includes('edit_posts')) {
+      return res
+        .status(403)
+        .json({ message: 'You do not have permission to edit posts' });
+    }
+
+    // Proceed to update
+    const updated = await updatePostById(postId, req.body);
+    if (!updated)
+      return res.status(404).json({ message: 'Post not found or not updated' });
+
     res.json({ message: 'Post updated' });
   } catch (err) {
     console.error(err);

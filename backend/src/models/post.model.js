@@ -47,6 +47,7 @@ export const findPostById = async (id) => {
       posts.content, 
       posts.created_at, 
       posts.updated_at, 
+      posts.author_id,
       users.email AS author
     FROM posts
     JOIN users ON posts.author_id = users.id

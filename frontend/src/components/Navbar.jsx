@@ -47,8 +47,8 @@ const Navbar = () => {
       position="static"
       sx={{
         mb: 3,
-        bgcolor: '#4c1130', // dark background
-        borderBottom: '4px solid #FF3C00', // 8-bit red border
+        bgcolor: '#4c1130',
+        borderBottom: '4px solid #FF3C00',
         fontFamily: '\'Press Start 2P\', cursive',
       }}
     >

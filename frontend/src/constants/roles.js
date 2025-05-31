@@ -6,7 +6,7 @@ export const ROLE_MAP = {
 };
 
 export const ROLE_OPTIONS = [
-  { id: 1, name: 'admin' },
-  { id: 2, name: 'editor' },
-  { id: 3, name: 'viewer' },
+  { id: 1, name: 'Admin' },
+  { id: 2, name: 'Editor' },
+  { id: 3, name: 'Viewer' },
 ];

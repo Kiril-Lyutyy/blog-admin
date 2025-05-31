@@ -39,6 +39,7 @@ export default function LoginForm() {
 
   return (
     <Box
+      sx={{ backgroundColor: '#20124d' }}
       maxWidth={400}
       mx="auto"
       mt={8}
@@ -74,6 +75,7 @@ export default function LoginForm() {
           helperText={errors.email?.message}
           fullWidth
           autoFocus
+          size="small"
         />
 
         <TextField
@@ -89,6 +91,7 @@ export default function LoginForm() {
           error={!!errors.password}
           helperText={errors.password?.message}
           fullWidth
+          size="small"
         />
 
         <Button
@@ -102,14 +105,8 @@ export default function LoginForm() {
           {isSubmitting ? 'Logging in...' : 'Login'}
         </Button>
 
-        <Typography variant="body2" align="center">
-          Don't have an account?{' '}
-          <Link
-            to="/register"
-            style={{ textDecoration: 'none', color: '#1976d2' }}
-          >
-            Register here
-          </Link>
+        <Typography fontSize={12} variant="body2" align="center">
+          Don't have an account? <Link to="/register">Register here</Link>
         </Typography>
       </Stack>
     </Box>

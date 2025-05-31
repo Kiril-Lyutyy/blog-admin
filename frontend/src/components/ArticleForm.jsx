@@ -3,17 +3,26 @@ import { Typography, TextField, Button, Box } from '@mui/material';
 const ArticleForm = () => {
   return (
     <Box component="form" sx={{ maxWidth: 600 }}>
-      <Typography variant="h3" mb={3}>
+      <Typography variant="h3" mb={1}>
         Create / Edit Article
       </Typography>
 
-      <TextField label="Title" fullWidth margin="normal" required />
+      <TextField
+        label="Title"
+        margin="normal"
+        fullWidth
+        size="small"
+        variant="outlined"
+        required
+      />
       <TextField
         label="Content"
         multiline
         rows={8}
-        fullWidth
         margin="normal"
+        fullWidth
+        size="small"
+        variant="outlined"
         required
       />
 

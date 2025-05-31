@@ -110,7 +110,16 @@ const ManageUsers = () => {
         Manage Users
       </Typography>
 
-      <Table>
+      <Table
+        sx={{
+          border: '2px solid #fff', // 8-bit red border
+          borderBottom: '1px solid #fff', // 8-bit red border
+          borderCollapse: 'separate',
+          borderRadius: '2px', // optional, for rounded corners
+          overflow: 'hidden', // ensures rounded corners work
+          backgroundColor: '#20124d', // dark background
+        }}
+      >
         <TableHead>
           <TableRow>
             <TableCell>Email</TableCell>
@@ -155,7 +164,7 @@ const ManageUsers = () => {
                     endIcon={<DeleteIcon />}
                     onClick={() => openDeleteConfirm(user.id)}
                     variant="contained"
-                    color="primary"
+                    color="secondary"
                     size="small"
                   >
                     Delete
@@ -169,7 +178,11 @@ const ManageUsers = () => {
 
       {/* Delete confirmation modal */}
       <Dialog open={deleteConfirm.open} onClose={closeDeleteConfirm}>
-        <DialogTitle fontSize={18}>Confirm Deletion</DialogTitle>
+        <DialogTitle>
+          <Typography variant="h5" gutterBottom>
+            Confirm Deletion
+          </Typography>
+        </DialogTitle>
         <DialogContent>
           <Typography variant="body1" gutterBottom>
             Are you sure you want to delete this user?

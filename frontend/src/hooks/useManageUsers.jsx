@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
+import debounce from 'lodash.debounce';
 import {
   getUsers,
   createUser,
@@ -9,14 +10,23 @@ import {
 
 const useManageUsers = () => {
   const [users, setUsers] = useState([]);
+  const [meta, setMeta] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [page, setPage] = useState(1);
+  const [search, _setSearch] = useState('');
+  const [roleFilter, setRoleFilter] = useState('');
 
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await getUsers();
-      setUsers(response.data);
+      const params = { page, search };
+      if (roleFilter) params.role_id = roleFilter;
+
+      const response = await getUsers(params);
+      setUsers(response.data.data);
+      setMeta(response.data.meta);
       setError(null);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch users');
@@ -24,6 +34,20 @@ const useManageUsers = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchUsers();
+  }, [page, search, roleFilter]);
+
+  // Debounced version of setSearch
+  const debouncedSetSearch = useMemo(() => debounce(_setSearch, 1000), []);
+
+  // Cleanup debounce on unmount
+  useEffect(() => {
+    return () => {
+      debouncedSetSearch.cancel();
+    };
+  }, [debouncedSetSearch]);
 
   const handleCreate = async (data) => {
     try {
@@ -46,7 +70,7 @@ const useManageUsers = () => {
   const handlePatchUser = async (id, updates) => {
     try {
       await patchUser(id, updates);
-      await fetchUsers();
+      fetchUsers();
     } catch (err) {
       setError(err.message || 'Failed to update user');
     }
@@ -61,19 +85,19 @@ const useManageUsers = () => {
     }
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   return {
     users,
+    meta,
     loading,
     error,
-    refetch: fetchUsers,
+    setPage,
+    setSearch: debouncedSetSearch,
+    setRoleFilter,
     createUser: handleCreate,
     updateUser: handleUpdate,
     deleteUser: handleDelete,
     patchUser: handlePatchUser,
+    roleFilter,
   };
 };
 

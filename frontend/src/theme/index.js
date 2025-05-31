@@ -20,7 +20,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "'Press Start 2P', cursive",
+    fontFamily: '\'Press Start 2P\', cursive',
     fontSize: 14,
     h4: {
       fontSize: 16,

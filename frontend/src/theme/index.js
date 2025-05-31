@@ -3,20 +3,20 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#FF3C00', // 8-bit red
-      contrastText: '#FFF8DC', // off-white
+      main: '#FF3C00',
+      contrastText: '#FFF8DC',
     },
     secondary: {
-      main: '#00E0FF', // neon cyan
-      contrastText: '#1A1A1A', // dark contrast
+      main: '#00E0FF',
+      contrastText: '#1A1A1A',
     },
     background: {
-      default: '#1A1A1A', // deep CRT-style black
-      paper: '#2B2B2B', // slightly lifted surface
+      default: '#1A1A1A',
+      paper: '#2B2B2B',
     },
     text: {
       primary: '#FAFAFA',
-      secondary: '#FFD700', // gold
+      secondary: '#FFD700',
     },
   },
   typography: {
@@ -110,14 +110,14 @@ const theme = createTheme({
           backgroundColor: '#1A1A1A',
         },
         a: {
-          color: '#00E0FF', // neon cyan
+          color: '#00E0FF',
           textDecoration: 'none',
         },
         'a:visited': {
-          color: '#FF00AA', // retro magenta
+          color: '#FF00AA',
         },
         'a:hover': {
-          color: '#FFFF66', // glowing yellow
+          color: '#FFFF66',
         },
       },
     },
@@ -125,15 +125,13 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontSize: '12px',
-          // paddingTop: '6px',
-          // paddingBottom: '6px',
           color: '#FFD700',
           '&.Mui-selected': {
-            backgroundColor: '#444400', // retro olive highlight
-            color: '#FAEC54', // bright yellow
+            backgroundColor: '#444400',
+            color: '#FAEC54',
           },
           '&.Mui-selected:hover': {
-            backgroundColor: '#666600', // brighter on hover
+            backgroundColor: '#666600',
             color: '#FFFF66',
           },
         },
@@ -145,9 +143,28 @@ const theme = createTheme({
     MuiMenuItem: {
       styleOverrides: {
         root: {
-          fontSize: '12px', // reduce font in dropdown items
+          fontSize: '12px',
           paddingTop: '6px',
           paddingBottom: '6px',
+        },
+      },
+    },
+    MuiPaginationItem: {
+      styleOverrides: {
+        root: {
+          fontSize: '12px',
+          color: '#FFD700',
+          border: '1px solid #555',
+        },
+        page: {
+          '&.Mui-selected': {
+            backgroundColor: '#9900CC',
+            color: '#FFF8DC',
+            borderColor: '#9900CC',
+            '&:hover': {
+              backgroundColor: '#AA33DD',
+            },
+          },
         },
       },
     },

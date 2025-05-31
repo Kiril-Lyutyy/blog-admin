@@ -16,39 +16,69 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  TablePagination,
+  Box,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import useManageUsers from '../hooks/useManageUsers';
 import { ROLE_OPTIONS } from '../constants/roles';
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
+import debounce from 'lodash.debounce';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const ManageUsers = () => {
-  const { users, loading, error, deleteUser, patchUser } = useManageUsers();
+  const {
+    users,
+    loading,
+    error,
+    meta,
+    patchUser,
+    deleteUser,
+    setPage,
+    setSearch,
+    setRoleFilter,
+    // Add roleFilter to control Select value
+    roleFilter,
+  } = useManageUsers();
 
-  // State for email inputs, validation and debounce
   const [editableUsers, setEditableUsers] = useState({});
   const debounceTimers = useRef({});
 
-  // State for delete confirmation modal
   const [deleteConfirm, setDeleteConfirm] = useState({
     open: false,
     userId: null,
   });
 
-  // Handle Role change (immediate update)
-  const handleRoleChange = (id, newRoleId) => {
-    patchUser(id, { role_id: newRoleId })
-      .then(() => {
-        toast.success('User role updated successfully!');
-      })
-      .catch((err) => {
-        toast.error(`Failed to update user role: ${err.message}`);
-      });
+  // Local state for controlled search input
+  const [searchInput, setSearchInput] = useState('');
+
+  // Debounced call to setSearch (from hook)
+  const debouncedSetSearch = useMemo(
+    () => debounce(setSearch, 1000),
+    [setSearch],
+  );
+
+  useEffect(() => {
+    return () => {
+      debouncedSetSearch.cancel();
+    };
+  }, [debouncedSetSearch]);
+
+  const handleSearchChange = (e) => {
+    const val = e.target.value;
+    setSearchInput(val);
+    debouncedSetSearch(val);
   };
 
-  // Handle email input change, update state, debounce API call
+  const handleRoleChange = (id, newRoleId) => {
+    patchUser(id, { role_id: newRoleId })
+      .then(() => toast.success('User role updated successfully!'))
+      .catch((err) =>
+        toast.error(`Failed to update user role: ${err.message}`),
+      );
+  };
+
   const handleEmailChange = (id, newEmail) => {
     setEditableUsers((prev) => ({
       ...prev,
@@ -63,12 +93,8 @@ const ManageUsers = () => {
       },
     }));
 
-    // Clear any existing debounce timer for this user
-    if (debounceTimers.current[id]) {
-      clearTimeout(debounceTimers.current[id]);
-    }
+    if (debounceTimers.current[id]) clearTimeout(debounceTimers.current[id]);
 
-    // Setup debounce timer to call patchUser 1s after last input
     debounceTimers.current[id] = setTimeout(() => {
       const emailError = !newEmail
         ? 'Email cannot be empty'
@@ -78,17 +104,14 @@ const ManageUsers = () => {
 
       if (!emailError) {
         patchUser(id, { email: newEmail })
-          .then(() => {
-            toast.success('User email updated successfully!');
-          })
-          .catch((err) => {
-            toast.error(`Failed to update user email: ${err.message}`);
-          });
+          .then(() => toast.success('User email updated successfully!'))
+          .catch((err) =>
+            toast.error(`Failed to update user email: ${err.message}`),
+          );
       }
     }, 1000);
   };
 
-  // Delete confirmation modal handlers
   const openDeleteConfirm = (userId) => {
     setDeleteConfirm({ open: true, userId });
   };
@@ -109,6 +132,30 @@ const ManageUsers = () => {
       <Typography variant="h3" mb={3}>
         Manage Users
       </Typography>
+
+      {/* Filters */}
+      <Box display="flex" gap={2} mb={2}>
+        <TextField
+          label="Search Email"
+          variant="outlined"
+          size="small"
+          value={searchInput}
+          onChange={handleSearchChange}
+        />
+        <Select
+          displayEmpty
+          size="small"
+          value={roleFilter}
+          onChange={(e) => setRoleFilter(e.target.value)}
+        >
+          <MenuItem value="">All Roles</MenuItem>
+          {ROLE_OPTIONS.map((role) => (
+            <MenuItem key={role.id} value={role.id}>
+              {role.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </Box>
 
       <Table>
         <TableHead>
@@ -154,7 +201,7 @@ const ManageUsers = () => {
                     endIcon={<DeleteIcon />}
                     onClick={() => openDeleteConfirm(user.id)}
                     variant="contained"
-                    color="primary"
+                    color="secondary"
                     size="small"
                   >
                     Delete
@@ -166,19 +213,27 @@ const ManageUsers = () => {
         </TableBody>
       </Table>
 
-      {/* Delete confirmation modal */}
+      {/* Pagination */}
+      {meta && (
+        <TablePagination
+          component="div"
+          count={meta.total}
+          page={meta.page - 1}
+          onPageChange={(_, newPage) => setPage(newPage + 1)}
+          rowsPerPage={meta.limit}
+          rowsPerPageOptions={[meta.limit]}
+        />
+      )}
+
+      {/* Delete Modal */}
       <Dialog open={deleteConfirm.open} onClose={closeDeleteConfirm}>
-        <DialogTitle fontSize={18}>Confirm Deletion</DialogTitle>
+        <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
-          <Typography variant="body1" gutterBottom>
-            Are you sure you want to delete this user?
-          </Typography>
+          <Typography>Are you sure you want to delete this user?</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDeleteConfirm} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={confirmDelete} color="primary" variant="contained">
+          <Button onClick={closeDeleteConfirm}>Cancel</Button>
+          <Button onClick={confirmDelete} variant="contained" color="error">
             Delete
           </Button>
         </DialogActions>

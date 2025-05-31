@@ -6,6 +6,7 @@ import {
   updatePost,
   deletePost,
 } from '../controllers/post.controller.js';
+import authMiddleware from '../middleware/auth.middleware.js';
 
 const router = Router();
 
@@ -77,7 +78,7 @@ router.get('/:id', getPostById);
  *       400:
  *         description: Invalid input
  */
-router.post('/', createPost);
+router.post('/', authMiddleware, createPost);
 
 /**
  * @swagger
@@ -104,7 +105,7 @@ router.post('/', createPost);
  *       404:
  *         description: Post not found
  */
-router.put('/:id', updatePost);
+router.put('/:id', authMiddleware, updatePost);
 
 /**
  * @swagger
@@ -125,6 +126,6 @@ router.put('/:id', updatePost);
  *       404:
  *         description: Post not found
  */
-router.delete('/:id', deletePost);
+router.delete('/:id', authMiddleware, deletePost);
 
 export default router;

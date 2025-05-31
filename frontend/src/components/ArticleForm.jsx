@@ -1,23 +1,69 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Typography, TextField, Button, Box } from '@mui/material';
+import usePosts from '../hooks/usePosts';
+import useAuth from '../hooks/useAuth';
 
 const ArticleForm = () => {
+  const { createPost } = usePosts();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!user?.id) return alert('Author not found');
+
+    createPost({
+      title,
+      content,
+      author_id: user.id,
+    })
+      .then(() => {
+        toast.success('Post created successfully!');
+        navigate('/', { replace: true });
+      })
+      .catch((err) => {
+        toast.error(`Failed to create post: ${err.message}`);
+      });
+
+    setTitle('');
+    setContent('');
+  };
+
   return (
-    <Box component="form" sx={{ maxWidth: 600 }}>
-      <Typography variant="h3" mb={3}>
+    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600 }}>
+      <Typography variant="h3" mb={1}>
         Create / Edit Article
       </Typography>
 
-      <TextField label="Title" fullWidth margin="normal" required />
+      <TextField
+        label="Title"
+        margin="normal"
+        fullWidth
+        size="small"
+        variant="outlined"
+        required
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
       <TextField
         label="Content"
         multiline
         rows={8}
-        fullWidth
         margin="normal"
+        fullWidth
+        size="small"
+        variant="outlined"
         required
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
       />
 
-      <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+      <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
         Save
       </Button>
     </Box>

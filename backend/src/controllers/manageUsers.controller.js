@@ -1,16 +1,32 @@
 import {
-  findAllUsers,
   findUserById,
   insertUser,
   updateUserById,
   deleteUserById,
   patchUserById,
+  findUsersWithFilters,
 } from '../models/manageUsers.model.js';
 
 export const getUsers = async (req, res) => {
   try {
-    const users = await findAllUsers();
-    res.json(users);
+    const { page = 1, limit = 10, search = '', role_id } = req.query;
+
+    const { users, total } = await findUsersWithFilters({
+      page: Number(page),
+      limit: Number(limit),
+      search,
+      role_id: role_id ? Number(role_id) : null,
+    });
+
+    res.json({
+      data: users,
+      meta: {
+        total,
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Failed to fetch users' });

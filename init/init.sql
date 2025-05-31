@@ -85,3 +85,32 @@ VALUES (
   '$2b$10$nQyLUTLdk1Rj4l82QqgDS.Ffhh4KUzydFD6TDfG5U1cRZr6XZgyDK', -- hashed 'viewer123'
   (SELECT id FROM roles WHERE name = 'viewer')
 );
+
+-- Insert 5 black cat blog posts
+-- Random post authors from user IDs 1-3
+INSERT INTO posts (title, content, author_id) VALUES
+(
+  'Midnight Patrols and Moonlight Meows',
+  'Last night, I embarked on my usual rooftop surveillance. All seemed quiet until a suspicious moth landed on the window. I stared it down for 27 minutes. It blinked first.',
+  FLOOR(1 + RAND() * 3)
+),
+(
+  'The Mysterious Red Dot: A Chronicle',
+  'It appeared again. That elusive red dot. I lunged, I pounced, I even did a backflip. But just as quickly as it came, it vanished. One day, it will be mine.',
+  FLOOR(1 + RAND() * 3)
+),
+(
+  'Human Keyboard Habits: An Investigation',
+  'I sat on the keyboard today. Again. It seems to greatly disturb the humans, which means I must be close to discovering its true power. The shift key tastes odd.',
+  FLOOR(1 + RAND() * 3)
+),
+(
+  'The Empty Bowl Tragedy',
+  'At 3:02 AM, I discovered my food bowl was nearly—*gasp*—empty. I wailed into the night. The humans awoke. Crisis averted. Tuna was served.',
+  FLOOR(1 + RAND() * 3)
+),
+(
+  'Sunbeams and Philosophy',
+  'Today I lay in a sunbeam for 6 hours and pondered the mysteries of the universe. Why chase mice when we could simply nap instead? A question for the ages.',
+  FLOOR(1 + RAND() * 3)
+);

@@ -4,6 +4,7 @@ import {
   createPost as createPostModel,
   updatePostById,
   deletePostById,
+  getPostWithAuthorById,
 } from '../models/post.model.js';
 
 export const getPosts = async (req, res) => {
@@ -30,8 +31,14 @@ export const getPostById = async (req, res) => {
 export const createPost = async (req, res) => {
   try {
     const { title, content, author_id } = req.body;
-    const id = await createPostModel({ title, content, author_id });
-    res.status(201).json({ id, message: 'Post created' });
+
+    const id = await createPost({ title, content, author_id });
+    const createdPost = await getPostWithAuthorById(id);
+
+    res.status(201).json({
+      message: 'Post created',
+      post: createdPost,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Failed to create post' });

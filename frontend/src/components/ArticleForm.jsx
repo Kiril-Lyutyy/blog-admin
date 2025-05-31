@@ -1,8 +1,31 @@
 import { Typography, TextField, Button, Box } from '@mui/material';
+import { useState } from 'react';
+import usePosts from '../hooks/usePosts';
+import useAuth from '../hooks/useAuth';
 
 const ArticleForm = () => {
+  const { createPost } = usePosts();
+  const { user } = useAuth();
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!user?.id) return alert('Author not found');
+
+    createPost({
+      title,
+      content,
+      author_id: user.id,
+    });
+
+    setTitle('');
+    setContent('');
+  };
+
   return (
-    <Box component="form" sx={{ maxWidth: 600 }}>
+    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600 }}>
       <Typography variant="h3" mb={1}>
         Create / Edit Article
       </Typography>
@@ -14,6 +37,8 @@ const ArticleForm = () => {
         size="small"
         variant="outlined"
         required
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
       />
       <TextField
         label="Content"
@@ -24,9 +49,11 @@ const ArticleForm = () => {
         size="small"
         variant="outlined"
         required
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
       />
 
-      <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+      <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
         Save
       </Button>
     </Box>

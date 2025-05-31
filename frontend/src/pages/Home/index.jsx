@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import usePosts from '../../hooks/usePosts';
 import useAuth from '../../hooks/useAuth';
-import { Container } from './styles.tsx';
+import { Container } from './styles';
 import SortOrderLimitControls from '../../components/SortOrderLimitControls';
 import PostCard from '../../components/PostCard';
 

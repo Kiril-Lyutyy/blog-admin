@@ -17,7 +17,7 @@ const StyledNavButton = ({ to, onClick, icon, text }) => (
     startIcon={icon}
     sx={{
       color: '#FFD700', // pixel gold
-      fontFamily: "'Press Start 2P', cursive",
+      fontFamily: '\'Press Start 2P\', cursive',
       fontSize: 12,
       padding: '8px 12px',
       '&:hover': {
@@ -49,7 +49,7 @@ const Navbar = () => {
         mb: 3,
         bgcolor: '#4c1130', // dark background
         borderBottom: '4px solid #FF3C00', // 8-bit red border
-        fontFamily: "'Press Start 2P', cursive",
+        fontFamily: '\'Press Start 2P\', cursive',
       }}
     >
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>

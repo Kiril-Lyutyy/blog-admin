@@ -8,17 +8,21 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "format:backend": "prettier --write backend/**/*.{js,json}",
     "lint:backend": "eslint backend",
+    "lint:backend:fix": "eslint backend --fix",
+    "lint:frontend": "eslint frontend --ext .js,.jsx,.ts,.tsx",
+    "lint:frontend:fix": "eslint frontend --ext .js,.jsx,.ts,.tsx --fix",
     "format:frontend": "prettier --write frontend/**/*.{js,jsx,json}",
     "prepare": "husky",
     "commit": "cz"
   },
   "lint-staged": {
     "backend/**/*.{js,ts,json}": [
-      "npm run lint:backend",
+      "npm run lint:backend:fix",
       "npm run format:backend"
     ],
     "frontend/**/*.{js,ts,jsx,tsx,json}": [
-      "npm run format:frontend"
+      "npm run format:frontend",
+      "npm run lint:frontend:fix"
     ]
   },
   "config": {
@@ -30,6 +34,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/eslint-parser": "^7.27.1",
+    "@babel/preset-react": "^7.27.1",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "commitizen": "^4.3.0",
@@ -38,5 +44,8 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.0.0",
     "prettier": "^3.5.3"
+  },
+  "dependencies": {
+    "eslint-plugin-react": "^7.37.5"
   }
 }

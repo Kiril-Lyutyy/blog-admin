@@ -9,8 +9,14 @@ import {
 
 export const getPosts = async (req, res) => {
   try {
-    const posts = await findAllPosts();
-    res.json(posts);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const sort = req.query.sort || 'created_at';
+    const order = req.query.order || 'desc';
+
+    const { posts, total } = await findAllPosts({ page, limit, sort, order });
+
+    res.json({ posts, totalCount: total });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Failed to fetch posts' });
@@ -32,7 +38,7 @@ export const createPost = async (req, res) => {
   try {
     const { title, content, author_id } = req.body;
 
-    const id = await createPost({ title, content, author_id });
+    const id = await createPostModel({ title, content, author_id });
     const createdPost = await getPostWithAuthorById(id);
 
     res.status(201).json({

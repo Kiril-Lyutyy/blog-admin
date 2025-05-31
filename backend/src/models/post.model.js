@@ -1,7 +1,25 @@
 import db from '../config/db.js';
 
-export const findAllPosts = async () => {
-  const [rows] = await db.query(`
+export const findAllPosts = async ({
+  page = 1,
+  limit = 10,
+  sort = 'created_at',
+  order = 'desc',
+}) => {
+  const offset = (page - 1) * limit;
+  const validSortFields = {
+    created_at: 'posts.created_at',
+    title: 'posts.title',
+    author: 'users.email',
+  };
+  const sortField = validSortFields[sort] || validSortFields['created_at'];
+  const sortOrder = order.toLowerCase() === 'asc' ? 'ASC' : 'DESC';
+  const [[{ total }]] = await db.query(`
+    SELECT COUNT(*) as total FROM posts
+  `);
+
+  const [rows] = await db.query(
+    `
     SELECT 
       posts.id, 
       posts.title, 
@@ -11,9 +29,13 @@ export const findAllPosts = async () => {
       users.email AS author
     FROM posts
     JOIN users ON posts.author_id = users.id
-    ORDER BY posts.created_at DESC
-  `);
-  return rows;
+    ORDER BY ${sortField} ${sortOrder}
+    LIMIT ? OFFSET ?
+    `,
+    [limit, offset],
+  );
+
+  return { posts: rows, total };
 };
 
 export const findPostById = async (id) => {

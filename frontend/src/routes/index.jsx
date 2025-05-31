@@ -1,12 +1,13 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
-import Dashboard from '../pages/Dashboard';
+import Home from '../pages/Home';
 import UserProfile from '../pages/UserProfile';
 import ArticleForm from '../components/ArticleForm';
 import ManageUsers from '../pages/ManageUsers';
 import RequireAuth from '../components/RequireAuth';
 import PageLayout from '../components/PageLayout';
+import PostDetails from '../pages/PostDetails';
 
 const AppRoutes = () => {
   return (
@@ -23,7 +24,8 @@ const AppRoutes = () => {
           </RequireAuth>
         }
       >
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/posts/:id" element={<PostDetails />} />
         <Route path="/profile" element={<UserProfile />} />
 
         {/* New Article requires 'edit_posts' permission */}

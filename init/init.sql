@@ -89,28 +89,23 @@ VALUES (
 -- Insert 5 black cat blog posts
 -- Random post authors from user IDs 1-3
 INSERT INTO posts (title, content, author_id) VALUES
-(
-  'Midnight Patrols and Moonlight Meows',
-  'Last night, I embarked on my usual rooftop surveillance. All seemed quiet until a suspicious moth landed on the window. I stared it down for 27 minutes. It blinked first.',
-  FLOOR(1 + RAND() * 3)
-),
-(
-  'The Mysterious Red Dot: A Chronicle',
-  'It appeared again. That elusive red dot. I lunged, I pounced, I even did a backflip. But just as quickly as it came, it vanished. One day, it will be mine.',
-  FLOOR(1 + RAND() * 3)
-),
-(
-  'Human Keyboard Habits: An Investigation',
-  'I sat on the keyboard today. Again. It seems to greatly disturb the humans, which means I must be close to discovering its true power. The shift key tastes odd.',
-  FLOOR(1 + RAND() * 3)
-),
-(
-  'The Empty Bowl Tragedy',
-  'At 3:02 AM, I discovered my food bowl was nearly—*gasp*—empty. I wailed into the night. The humans awoke. Crisis averted. Tuna was served.',
-  FLOOR(1 + RAND() * 3)
-),
-(
-  'Sunbeams and Philosophy',
-  'Today I lay in a sunbeam for 6 hours and pondered the mysteries of the universe. Why chase mice when we could simply nap instead? A question for the ages.',
-  FLOOR(1 + RAND() * 3)
-);
+('The Midnight Whisker Chronicles', 'Tonight was a silent hunt in the garden. The crickets were unusually loud, but I remained focused.', FLOOR(1 + RAND() * 3)),
+('Catnip Dreams and Nighttime Schemes', 'I dreamed of fields full of catnip and endless laser dots. Reality isn’t so bad, but dreams are sweeter.', FLOOR(1 + RAND() * 3)),
+('The Great Sofa Siege', 'The humans took over my favorite spot, so I strategized a way to reclaim it. Stealth and patience won the day.', FLOOR(1 + RAND() * 3)),
+('Mouse Hunt: Success!', 'At dawn, I caught a mouse toy. Victory tastes sweet. I left it as a gift by the door.', FLOOR(1 + RAND() * 3)),
+('Shadows and Paws', 'I chased my shadow for 10 minutes. It kept running away. Maybe one day I’ll catch it.', FLOOR(1 + RAND() * 3)),
+('The Window Watcher', 'Sitting by the window is the best. Birds, squirrels, and the occasional suspicious neighbor come by.', FLOOR(1 + RAND() * 3)),
+('Laundry Day Adventures', 'I jumped into the laundry basket and got buried under soft clothes. A cozy trap!', FLOOR(1 + RAND() * 3)),
+('The Untold Story of the Lost Feather', 'I found a feather today. It is now my prized possession, until the humans find it.', FLOOR(1 + RAND() * 3)),
+('Nighttime Symphony', 'The hum of the fridge, the ticking clock, and my soft purring compose a perfect melody.', FLOOR(1 + RAND() * 3)),
+('Curtain Climbing Techniques', 'I refined my curtain climbing skills. The humans don’t appreciate it, but I do.', FLOOR(1 + RAND() * 3)),
+('Breakfast Negotiations', 'I meowed insistently until the humans served an extra helping. Persistence pays off.', FLOOR(1 + RAND() * 3)),
+('The Lost Toy Mystery', 'One toy is missing. I have no idea where it went. Suspicious.', FLOOR(1 + RAND() * 3)),
+('The Great Escape Plan', 'I almost escaped through the slightly open door. Next time, I’ll be faster.', FLOOR(1 + RAND() * 3)),
+('Sunbeam Lounging Level: Expert', 'Perfected the art of stretching in the warm sunbeams. Ultimate relaxation achieved.', FLOOR(1 + RAND() * 3)),
+('The Case of the Invisible Bug', 'I stalked a bug that vanished in thin air. Ghost bugs exist.', FLOOR(1 + RAND() * 3)),
+('Pawprints on the Keyboard', 'Left my mark on the humans’ important documents. They were not amused.', FLOOR(1 + RAND() * 3)),
+('Chasing the Red Dot Redux', 'That dot returned! The battle continues. I am ready.', FLOOR(1 + RAND() * 3)),
+('The Pillow Fortress', 'Built a fortress out of pillows. Invincible!', FLOOR(1 + RAND() * 3)),
+('Night Vision Trials', 'Tested my night vision under the bed. Results: excellent.', FLOOR(1 + RAND() * 3)),
+('The Yarn Ball Conquest', 'Rolled the yarn ball all over the house. Total chaos and fun.', FLOOR(1 + RAND() * 3));

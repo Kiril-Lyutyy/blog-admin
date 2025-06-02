@@ -1,4 +1,3 @@
-// Navbar/styles.js
 import { AppBar, Button, Toolbar, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 

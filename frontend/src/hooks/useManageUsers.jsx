@@ -42,7 +42,7 @@ const useManageUsers = () => {
     fetchUsers();
   }, [page, search, roleFilter]);
 
-  const debouncedSetSearch = useMemo(() => debounce(_setSearch, 1000), []);
+  const debouncedSetSearch = useMemo(() => debounce(_setSearch, 500), []);
 
   useEffect(() => {
     return () => {

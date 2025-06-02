@@ -36,9 +36,11 @@ export const getUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
   try {
     const user = await findUserById(req.params.id);
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+
     res.json(user);
   } catch (err) {
     console.error(err);
@@ -48,12 +50,14 @@ export const getUserById = async (req, res) => {
 
 export const createUser = async (req, res) => {
   const { email, password, role_id } = req.body;
+
   if (!email || !password || !role_id) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
   try {
     const id = await insertUser({ email, password, role_id });
+
     res.status(201).json({ id, email, role_id });
   } catch (err) {
     console.error(err);
@@ -63,15 +67,18 @@ export const createUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   const { email, password, role_id } = req.body;
+
   try {
     const updated = await updateUserById(req.params.id, {
       email,
       password,
       role_id,
     });
+
     if (!updated) {
       return res.status(404).json({ message: 'User not found' });
     }
+
     res.json({ message: 'User updated successfully' });
   } catch (err) {
     console.error(err);
@@ -82,9 +89,11 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const deleted = await deleteUserById(req.params.id);
+
     if (!deleted) {
       return res.status(404).json({ message: 'User not found' });
     }
+
     res.status(204).send();
   } catch (err) {
     console.error(err);
@@ -95,11 +104,12 @@ export const deleteUser = async (req, res) => {
 export const patchUser = async (req, res) => {
   const { id } = req.params;
   const { email, role_id } = req.body;
-
   const fields = {};
+
   if (typeof email === 'string') {
     fields.email = email;
   }
+
   if (typeof role_id === 'number') {
     fields.role_id = role_id;
   }
@@ -110,6 +120,7 @@ export const patchUser = async (req, res) => {
 
   try {
     const updated = await patchUserById(id, fields);
+
     if (!updated) {
       return res
         .status(404)

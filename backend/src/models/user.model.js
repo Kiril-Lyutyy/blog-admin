@@ -25,7 +25,6 @@ export const findUserById = async (id) => {
 
 export async function createUser(email, password, roleName = userRoles.viewer) {
   const hashedPassword = await bcrypt.hash(password, 10);
-
   const [role] = await pool.query('SELECT id FROM roles WHERE name = ?', [
     roleName,
   ]);
@@ -35,7 +34,6 @@ export async function createUser(email, password, roleName = userRoles.viewer) {
   }
 
   const roleId = role[0].id;
-
   const [result] = await pool.query(
     'INSERT INTO users (email, password, role_id) VALUES (?, ?, ?)',
     [email, hashedPassword, roleId],
@@ -67,11 +65,6 @@ export async function findUserIdByRefreshToken(token) {
 export async function deleteRefreshToken(token) {
   await pool.query('DELETE FROM refresh_tokens WHERE token = ?', [token]);
 }
-
-// not used
-// export async function deleteAllRefreshTokensForUser(userId) {
-//   await pool.query('DELETE FROM refresh_tokens WHERE user_id = ?', [userId]);
-// }
 
 export async function findUserByIdWithRole(userId) {
   const [rows] = await pool.query(

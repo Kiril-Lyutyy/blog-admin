@@ -45,6 +45,7 @@ const router = express.Router();
  *       500:
  *         description: Server error
  */
+
 router.post(
   '/register',
   [
@@ -103,39 +104,6 @@ router.post(
  *         description: Server error
  */
 router.post('/login', authController.login);
-
-/**
- * @swagger
- * /api/auth/profile:
- *   get:
- *     summary: Get user profile
- *     tags: [Auth]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Profile data retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Secure profile data
- *                 user:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                       example: 60b7c0b3c1a4c0001c8d4b8d
- *                     email:
- *                       type: string
- *                       example: user@example.com
- *       401:
- *         description: Invalid token
- */
-router.get('/profile', authMiddleware, authController.profile);
 
 /**
  * @swagger

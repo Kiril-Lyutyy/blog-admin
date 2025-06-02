@@ -51,6 +51,7 @@ docker compose up --watch db backend frontend
 ```bash
 docker compose run api-test
 ```
+Current test coverage is 80%.
 
 ## Project Structure
 ```bash

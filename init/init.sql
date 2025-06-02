@@ -70,7 +70,7 @@ VALUES (
   (SELECT id FROM roles WHERE name = 'admin')
 );
 
--- Insert test editor user, email: editor@example.com, password: editor123
+-- Insert test editor user, email: editor@example.com, password: 'admin123'
 INSERT INTO users (email, password, role_id)
 VALUES (
   'editor@example.com',
@@ -78,7 +78,7 @@ VALUES (
   (SELECT id FROM roles WHERE name = 'editor')
 );
 
--- Insert test viewer user, email: viewer@example.com, password: viewer123
+-- Insert test viewer user, email: viewer@example.com, password: 'admin123'
 INSERT INTO users (email, password, role_id)
 VALUES (
   'viewer@example.com',

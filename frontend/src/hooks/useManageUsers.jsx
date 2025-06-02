@@ -1,11 +1,12 @@
-import { useEffect, useState, useMemo, useCallback } from 'react';
 import debounce from 'lodash.debounce';
+import { useEffect, useMemo, useState } from 'react';
+
 import {
-  getUsers,
   createUser,
-  updateUser,
   deleteUser,
+  getUsers,
   patchUser,
+  updateUser,
 } from '../api/manageUsersApi';
 
 const useManageUsers = () => {
@@ -22,7 +23,9 @@ const useManageUsers = () => {
     setLoading(true);
     try {
       const params = { page, search };
-      if (roleFilter) params.role_id = roleFilter;
+      if (roleFilter) {
+        params.role_id = roleFilter;
+      }
 
       const response = await getUsers(params);
       setUsers(response.data.data);
@@ -39,10 +42,8 @@ const useManageUsers = () => {
     fetchUsers();
   }, [page, search, roleFilter]);
 
-  // Debounced version of setSearch
   const debouncedSetSearch = useMemo(() => debounce(_setSearch, 1000), []);
 
-  // Cleanup debounce on unmount
   useEffect(() => {
     return () => {
       debouncedSetSearch.cancel();

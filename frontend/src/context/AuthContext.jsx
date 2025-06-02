@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+
 import { getProfile } from '../api/authApi';
 
-const useAuth = () => {
+const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -37,7 +40,11 @@ const useAuth = () => {
     setUser(null);
   };
 
-  return { user, loading, loginUser, logout };
+  return (
+    <AuthContext.Provider value={{ user, loading, loginUser, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-export default useAuth;
+export const useAuth = () => useContext(AuthContext);

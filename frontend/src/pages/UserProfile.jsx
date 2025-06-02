@@ -1,5 +1,6 @@
-import { Typography, Box } from '@mui/material';
-import useAuth from '../hooks/useAuth';
+import { Box, Typography } from '@mui/material';
+
+import { useAuth } from '../context/AuthContext';
 
 const UserProfile = () => {
   const { user } = useAuth();
@@ -15,7 +16,6 @@ const UserProfile = () => {
       </Typography>
       <Typography>Email: {user.email}</Typography>
       <Typography>Role: {user.role}</Typography>
-      {/* Later add update profile form here */}
     </Box>
   );
 };

@@ -1,14 +1,15 @@
+import { Container } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-import { Box, Container } from '@mui/material';
+
+import { useAuth } from '../context/AuthContext';
 import Navbar from './Navbar';
-import useAuth from '../hooks/useAuth';
 
 const PageLayout = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   return (
     <>
-      {user && <Navbar user={user} onLogout={logout} />}
+      {user && <Navbar />}
       <Container maxWidth="lg" sx={{ pt: 3 }}>
         <Outlet />
       </Container>

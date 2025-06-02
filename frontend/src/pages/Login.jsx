@@ -1,7 +1,7 @@
 import { Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { login } from '../api/authApi';
 import AuthFormWrapper from '../components/Auth/AuthFormWrapper';

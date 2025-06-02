@@ -1,4 +1,4 @@
-import { useCallback,useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { getPostById } from '../api/postsApi';
 
@@ -8,7 +8,9 @@ const usePost = (id) => {
   const [error, setError] = useState(null);
 
   const fetchPost = useCallback(async () => {
-    if (!id) {return;}
+    if (!id) {
+      return;
+    }
     setLoading(true);
     try {
       const response = await getPostById(id);

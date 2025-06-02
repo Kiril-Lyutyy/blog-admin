@@ -1,5 +1,5 @@
-import { Alert,CircularProgress } from '@mui/material';
-import { Link as RouterLink,useParams } from 'react-router-dom';
+import { Alert, CircularProgress } from '@mui/material';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 
 import usePost from '../hooks/usePost';
 import {
@@ -14,9 +14,15 @@ const PostDetails = () => {
   const { id } = useParams();
   const { post, loading, error } = usePost(id);
 
-  if (loading) {return <CircularProgress />;}
-  if (error) {return <Alert severity="error">{error}</Alert>;}
-  if (!post) {return <Alert severity="info">Post not found</Alert>;}
+  if (loading) {
+    return <CircularProgress />;
+  }
+  if (error) {
+    return <Alert severity="error">{error}</Alert>;
+  }
+  if (!post) {
+    return <Alert severity="info">Post not found</Alert>;
+  }
 
   return (
     <PostBox>

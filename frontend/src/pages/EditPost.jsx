@@ -1,4 +1,4 @@
-import { Alert,CircularProgress } from '@mui/material';
+import { Alert, CircularProgress } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -23,9 +23,15 @@ const EditPostPage = () => {
     }
   };
 
-  if (loading) {return <CircularProgress />;}
-  if (error) {return <Alert severity="error">{error}</Alert>;}
-  if (!post) {return <Alert severity="error">Post not found</Alert>;}
+  if (loading) {
+    return <CircularProgress />;
+  }
+  if (error) {
+    return <Alert severity="error">{error}</Alert>;
+  }
+  if (!post) {
+    return <Alert severity="error">Post not found</Alert>;
+  }
 
   if (post.author_id !== user?.id) {
     return <Alert severity="error">You can only edit your own posts</Alert>;

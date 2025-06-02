@@ -1,5 +1,5 @@
 // Navbar/styles.js
-import { AppBar, Button,Toolbar, Typography } from '@mui/material';
+import { AppBar, Button, Toolbar, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export const StyledAppBar = styled(AppBar)(({ theme }) => ({

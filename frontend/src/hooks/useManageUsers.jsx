@@ -1,5 +1,5 @@
 import debounce from 'lodash.debounce';
-import { useEffect, useMemo,useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import {
   createUser,
@@ -23,7 +23,9 @@ const useManageUsers = () => {
     setLoading(true);
     try {
       const params = { page, search };
-      if (roleFilter) {params.role_id = roleFilter;}
+      if (roleFilter) {
+        params.role_id = roleFilter;
+      }
 
       const response = await getUsers(params);
       setUsers(response.data.data);

@@ -5,7 +5,7 @@ import {
   CircularProgress,
   Typography,
 } from '@mui/material';
-import { Link as RouterLink,useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 
 import usePost from '../hooks/usePost';
 
@@ -13,9 +13,15 @@ const PostDetails = () => {
   const { id } = useParams();
   const { post, loading, error } = usePost(id);
 
-  if (loading) {return <CircularProgress />;}
-  if (error) {return <Alert severity="error">{error}</Alert>;}
-  if (!post) {return <Typography>Post not found</Typography>;}
+  if (loading) {
+    return <CircularProgress />;
+  }
+  if (error) {
+    return <Alert severity="error">{error}</Alert>;
+  }
+  if (!post) {
+    return <Typography>Post not found</Typography>;
+  }
 
   return (
     <Box>

@@ -12,7 +12,9 @@ const CreatePostPage = () => {
 
   const handleCreate = async ({ title, content }) => {
     try {
-      if (!user?.id) {throw new Error('Author not found');}
+      if (!user?.id) {
+        throw new Error('Author not found');
+      }
       await createPost({ title, content, author_id: user.id });
       toast.success('Post created successfully!');
       navigate('/', { replace: true });

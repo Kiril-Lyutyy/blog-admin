@@ -11,6 +11,7 @@ export default function authMiddleware(req, res, next) {
 
   try {
     const decoded = verifyToken(token);
+
     req.user = decoded;
     next();
   } catch {

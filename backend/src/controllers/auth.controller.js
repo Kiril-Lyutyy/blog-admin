@@ -21,6 +21,7 @@ export const register = async (req, res) => {
   try {
     const { email, password } = req.body;
     const exists = await findUserByEmail(email);
+
     if (exists) {
       return res.status(409).json({ message: 'User already exists' });
     }
@@ -52,7 +53,6 @@ export const login = async (req, res) => {
     const refreshToken = await generateRefreshToken();
 
     await saveRefreshToken(refreshToken, user.id);
-
     res
       .cookie('refreshToken', refreshToken, {
         httpOnly: true,
@@ -84,6 +84,7 @@ export const refresh = async (req, res) => {
     }
 
     const user = await findUserById(userId);
+
     if (!user) {
       console.warn(`Refresh token mapped to nonexistent user: ${refreshToken}`);
       res.clearCookie('refreshToken');
@@ -94,8 +95,8 @@ export const refresh = async (req, res) => {
 
     const newAccessToken = generateToken({ id: user.id, email: user.email });
     const newRefreshToken = await generateRefreshToken();
-    await saveRefreshToken(newRefreshToken, user.id);
 
+    await saveRefreshToken(newRefreshToken, user.id);
     res
       .cookie('refreshToken', newRefreshToken, {
         httpOnly: true,

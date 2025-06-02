@@ -4,6 +4,7 @@ export const findAllUsers = async () => {
   const [users] = await db.query(
     'SELECT id, email, role_id, created_at FROM users',
   );
+
   return users;
 };
 
@@ -12,6 +13,7 @@ export const findUserById = async (id) => {
     'SELECT id, email, role_id, created_at FROM users WHERE id = ?',
     [id],
   );
+
   return rows[0];
 };
 
@@ -20,6 +22,7 @@ export const insertUser = async ({ email, password, role_id }) => {
     'INSERT INTO users (email, password, role_id) VALUES (?, ?, ?)',
     [email, password, role_id],
   );
+
   return result.insertId;
 };
 
@@ -28,6 +31,7 @@ export const updateUserById = async (id, { email, password, role_id }) => {
     'UPDATE users SET email = ?, password = ?, role_id = ? WHERE id = ?',
     [email, password, role_id, id],
   );
+
   return result.affectedRows;
 };
 
@@ -43,7 +47,6 @@ export const patchUserById = async (id, fields) => {
 
   const setClause = updates.map(([key]) => `${key} = ?`).join(', ');
   const values = updates.map(([, value]) => value);
-
   const [result] = await db.query(
     `UPDATE users SET ${setClause} WHERE id = ?`,
     [...values, id],
@@ -54,6 +57,7 @@ export const patchUserById = async (id, fields) => {
 
 export const deleteUserById = async (id) => {
   const [result] = await db.query('DELETE FROM users WHERE id = ?', [id]);
+
   return result.affectedRows;
 };
 
@@ -64,7 +68,6 @@ export const findUsersWithFilters = async ({
   role_id = null,
 }) => {
   const offset = (page - 1) * limit;
-
   const conditions = [];
   const params = [];
 
@@ -80,7 +83,6 @@ export const findUsersWithFilters = async ({
 
   const whereClause =
     conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
-
   const query = `
     SELECT users.id, users.email, users.role_id, roles.name AS role_name
     FROM users
@@ -90,13 +92,11 @@ export const findUsersWithFilters = async ({
     LIMIT ?
     OFFSET ?
   `;
-
   const countQuery = `
     SELECT COUNT(*) AS total
     FROM users
     ${whereClause}
   `;
-
   const [userRows] = await db.query(query, [...params, limit, offset]);
   const [countRows] = await db.query(countQuery, params);
 

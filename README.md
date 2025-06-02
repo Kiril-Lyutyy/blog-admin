@@ -40,14 +40,17 @@ MYSQL_PASSWORD=admin
 MYSQL_PORT=3306
 MYSQL_PORT_EXPOSE=3307
 VITE_API_URL=http://localhost:4000
+PORT=5000
 ```
 3. Run the project (with hot reload):
 ```bash
 docker compose up --watch db backend frontend
 ```
 
-4. Run tests
+4. Run tests (db docker container should be running)
+```bash
 docker compose run api-test
+```
 
 ## Project Structure
 ```bash
@@ -117,7 +120,7 @@ password: 'admin123',
 
 ## API Documentation
 
-Available at: [http://localhost:4000/api-docs](http://localhost:4000/api-docs)
+Available at: [http://localhost:5000/api-docs](http://localhost:5000/api-docs)
 (Generated with Swagger)
 
 ### 📄 Licence

@@ -2,16 +2,17 @@ import { Alert, CircularProgress } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { updatePost } from '../api/postsApi';
 import PostForm from '../components/PostForm';
 import { useAuth } from '../context/AuthContext';
 import usePost from '../hooks/usePost';
+import usePosts from '../hooks/usePosts';
 
 const EditPostPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { post, loading, error } = usePost(id);
+  const { updatePost } = usePosts();
 
   const handleUpdate = async ({ title, content }) => {
     try {
@@ -26,9 +27,11 @@ const EditPostPage = () => {
   if (loading) {
     return <CircularProgress />;
   }
+
   if (error) {
     return <Alert severity="error">{error}</Alert>;
   }
+
   if (!post) {
     return <Alert severity="error">Post not found</Alert>;
   }

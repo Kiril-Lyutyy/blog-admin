@@ -1,6 +1,11 @@
-import { useCallback,useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { deletePost, getPostById, getPosts, updatePost } from '../api/postsApi';
+import {
+  createPost as createPostApi,
+  deletePost,
+  getPosts,
+  updatePost,
+} from '../api/postsApi';
 
 const usePosts = ({
   page = 1,
@@ -32,8 +37,10 @@ const usePosts = ({
 
   const handleCreate = async (data) => {
     try {
-      await createPost(data);
-      if (autoFetch) {await fetchPosts();}
+      await createPostApi(data);
+      if (autoFetch) {
+        await fetchPosts();
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create post');
     }
@@ -42,7 +49,9 @@ const usePosts = ({
   const handleUpdate = async (id, data) => {
     try {
       await updatePost(id, data);
-      if (autoFetch) {await fetchPosts();}
+      if (autoFetch) {
+        await fetchPosts();
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update post');
     }
@@ -51,7 +60,9 @@ const usePosts = ({
   const handleDelete = async (id) => {
     try {
       await deletePost(id);
-      if (autoFetch) {await fetchPosts();}
+      if (autoFetch) {
+        await fetchPosts();
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to delete post');
     }

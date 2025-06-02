@@ -1,4 +1,4 @@
-import { Box, Typography, Button, styled } from '@mui/material';
+import { Box, Button, styled, Typography } from '@mui/material';
 
 export const PostBox = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(2),

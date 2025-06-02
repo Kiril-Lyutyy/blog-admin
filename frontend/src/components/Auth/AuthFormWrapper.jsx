@@ -1,4 +1,4 @@
-import { Box, Typography, Alert } from '@mui/material';
+import { Alert, Box, Typography } from '@mui/material';
 
 const AuthFormWrapper = ({ title, error, children, onSubmit }) => (
   <Box

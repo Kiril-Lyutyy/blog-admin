@@ -1,12 +1,12 @@
+import { Box, Button, Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-import { Grid, Box, Button } from '@mui/material';
 import {
+  ButtonGroup,
   PostBox,
-  PostTitle,
   PostMeta,
   PostPreview,
-  ButtonGroup,
+  PostTitle,
 } from './styles';
 import { stripHtml } from './utils';
 

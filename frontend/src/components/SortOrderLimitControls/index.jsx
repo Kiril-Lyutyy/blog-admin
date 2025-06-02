@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 import { ControlsWrapper } from './styles';
 

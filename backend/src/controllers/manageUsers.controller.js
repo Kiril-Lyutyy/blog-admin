@@ -1,10 +1,10 @@
 import {
-  findUserById,
-  insertUser,
-  updateUserById,
   deleteUserById,
-  patchUserById,
+  findUserById,
   findUsersWithFilters,
+  insertUser,
+  patchUserById,
+  updateUserById,
 } from '../models/manageUsers.model.js';
 
 export const getUsers = async (req, res) => {
@@ -36,7 +36,9 @@ export const getUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
   try {
     const user = await findUserById(req.params.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
     res.json(user);
   } catch (err) {
     console.error(err);
@@ -67,7 +69,9 @@ export const updateUser = async (req, res) => {
       password,
       role_id,
     });
-    if (!updated) return res.status(404).json({ message: 'User not found' });
+    if (!updated) {
+      return res.status(404).json({ message: 'User not found' });
+    }
     res.json({ message: 'User updated successfully' });
   } catch (err) {
     console.error(err);
@@ -78,7 +82,9 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const deleted = await deleteUserById(req.params.id);
-    if (!deleted) return res.status(404).json({ message: 'User not found' });
+    if (!deleted) {
+      return res.status(404).json({ message: 'User not found' });
+    }
     res.status(204).send();
   } catch (err) {
     console.error(err);
@@ -91,8 +97,12 @@ export const patchUser = async (req, res) => {
   const { email, role_id } = req.body;
 
   const fields = {};
-  if (typeof email === 'string') fields.email = email;
-  if (typeof role_id === 'number') fields.role_id = role_id;
+  if (typeof email === 'string') {
+    fields.email = email;
+  }
+  if (typeof role_id === 'number') {
+    fields.role_id = role_id;
+  }
 
   if (Object.keys(fields).length === 0) {
     return res.status(400).json({ message: 'No valid fields to update' });

@@ -1,10 +1,11 @@
 import { Router } from 'express';
+
 import {
-  getPosts,
-  getPostById,
   createPost,
-  updatePost,
   deletePost,
+  getPostById,
+  getPosts,
+  updatePost,
 } from '../controllers/post.controller.js';
 import authMiddleware from '../middleware/auth.middleware.js';
 
@@ -29,9 +30,15 @@ const router = Router();
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Post'
+ *               type: object
+ *               properties:
+ *                 posts:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Post'
+ *                 totalCount:
+ *                   type: integer
+ *                   example: 42
  */
 router.get('/', getPosts);
 
@@ -75,6 +82,16 @@ router.get('/:id', getPostById);
  *     responses:
  *       201:
  *         description: Blog post created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Post created
+ *                 post:
+ *                   $ref: '#/components/schemas/Post'
  *       400:
  *         description: Invalid input
  */
@@ -102,6 +119,16 @@ router.post('/', authMiddleware, createPost);
  *     responses:
  *       200:
  *         description: Blog post updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Post updated
+ *       403:
+ *         description: Forbidden - insufficient permissions or not the author
  *       404:
  *         description: Post not found
  */
@@ -121,8 +148,16 @@ router.put('/:id', authMiddleware, updatePost);
  *         required: true
  *         description: ID of the post to delete
  *     responses:
- *       204:
+ *       200:
  *         description: Blog post deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Post deleted
  *       404:
  *         description: Post not found
  */

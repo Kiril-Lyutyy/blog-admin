@@ -37,7 +37,9 @@ export const patchUserById = async (id, fields) => {
     allowedFields.includes(key),
   );
 
-  if (updates.length === 0) return 0;
+  if (updates.length === 0) {
+    return 0;
+  }
 
   const setClause = updates.map(([key]) => `${key} = ?`).join(', ');
   const values = updates.map(([, value]) => value);

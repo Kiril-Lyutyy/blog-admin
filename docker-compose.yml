@@ -12,7 +12,7 @@ services:
       - ${MYSQL_PORT_EXPOSE}:${MYSQL_PORT}
     volumes:
       - db_data:/var/lib/mysql
-      - ./init:/docker-entrypoint-initdb.d
+      - ./backend/init:/docker-entrypoint-initdb.d
     networks:
       - app-network
 
@@ -58,6 +58,27 @@ services:
       - app-network
     depends_on:
       - backend
+
+  api-test:
+    build:
+      context: ./backend
+    container_name: admin-blog-api-test
+    working_dir: /app
+    environment:
+      - NODE_ENV=test
+      - MYSQL_HOST=db
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_PORT=${MYSQL_PORT}
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - db
+    networks:
+      - app-network
+    command: ["npm", "run", "test"]
 
 networks:
   app-network:

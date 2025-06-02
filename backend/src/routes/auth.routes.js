@@ -1,5 +1,6 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
+
 import * as authController from '../controllers/auth.controller.js';
 import authMiddleware from '../middleware/auth.middleware.js';
 
@@ -44,6 +45,7 @@ const router = express.Router();
  *       500:
  *         description: Server error
  */
+
 router.post(
   '/register',
   [
@@ -105,39 +107,6 @@ router.post('/login', authController.login);
 
 /**
  * @swagger
- * /api/auth/profile:
- *   get:
- *     summary: Get user profile
- *     tags: [Auth]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Profile data retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Secure profile data
- *                 user:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                       example: 60b7c0b3c1a4c0001c8d4b8d
- *                     email:
- *                       type: string
- *                       example: user@example.com
- *       401:
- *         description: Invalid token
- */
-router.get('/profile', authMiddleware, authController.profile);
-
-/**
- * @swagger
  * /api/auth/refresh:
  *   post:
  *     summary: Refresh access token using refresh token
@@ -174,6 +143,7 @@ router.post('/refresh', authController.refresh);
  *     responses:
  *       200:
  *         description: Logged out
+ *
  */
 router.post('/logout', authController.logout);
 
@@ -199,6 +169,7 @@ router.post('/logout', authController.logout);
  *                   type: string
  *                 role:
  *                   type: string
+ *                   example: admin
  *                 permissions:
  *                   type: array
  *                   items:

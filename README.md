@@ -46,7 +46,7 @@ VITE_API_URL=http://localhost:4000
 docker compose up --watch db backend frontend
 ```
 
-4. Run tests (in docker container)
+4. Run tests
 docker compose run api-test
 
 ## Project Structure
@@ -102,6 +102,19 @@ package.json
 README.md
 eslint.config.js
 ```
+## Login to the App with predefined users
+Admin
+email: 'admin@example.com'
+password: 'admin123',
+
+Editor
+email: 'editor@example.com'
+password: 'admin123',
+
+Viewer
+email: 'viewer@example.com'
+password: 'admin123',
+
 ## API Documentation
 
 Available at: [http://localhost:4000/api-docs](http://localhost:4000/api-docs)

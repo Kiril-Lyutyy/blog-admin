@@ -143,6 +143,7 @@ router.post('/refresh', authController.refresh);
  *     responses:
  *       200:
  *         description: Logged out
+ *
  */
 router.post('/logout', authController.logout);
 
@@ -168,6 +169,7 @@ router.post('/logout', authController.logout);
  *                   type: string
  *                 role:
  *                   type: string
+ *                   example: admin
  *                 permissions:
  *                   type: array
  *                   items:

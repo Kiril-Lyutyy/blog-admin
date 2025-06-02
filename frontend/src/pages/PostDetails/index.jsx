@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
+
 import { CircularProgress, Alert } from '@mui/material';
 import usePosts from '../hooks/usePosts';
 import {

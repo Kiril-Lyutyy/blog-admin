@@ -1,4 +1,7 @@
 import { toast } from 'react-toastify';
+import { useState, useRef, useMemo, useEffect } from 'react';
+import debounce from 'lodash.debounce';
+
 import {
   Typography,
   Table,
@@ -22,8 +25,6 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import useManageUsers from '../hooks/useManageUsers';
 import { ROLE_OPTIONS } from '../constants/roles';
-import { useState, useRef, useMemo, useEffect } from 'react';
-import debounce from 'lodash.debounce';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -38,7 +39,6 @@ const ManageUsers = () => {
     setPage,
     setSearch,
     setRoleFilter,
-    // Add roleFilter to control Select value
     roleFilter,
   } = useManageUsers();
 

@@ -15,7 +15,6 @@ const UserProfile = () => {
       </Typography>
       <Typography>Email: {user.email}</Typography>
       <Typography>Role: {user.role}</Typography>
-      {/* Later add update profile form here */}
     </Box>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
+
 import {
   Typography,
   CircularProgress,
@@ -22,9 +23,17 @@ const PostDetails = () => {
     loadPost();
   }, [id, fetchPost]);
 
-  if (loading) return <CircularProgress />;
-  if (error) return <Alert severity="error">{error}</Alert>;
-  if (!post) return <Typography>Post not found</Typography>;
+  if (loading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    return <Alert severity="error">{error}</Alert>;
+  }
+
+  if (!post) {
+    return <Typography>Post not found</Typography>;
+  }
 
   return (
     <Box>

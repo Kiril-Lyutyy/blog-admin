@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
+
 import {
   Typography,
   TextField,
@@ -16,6 +17,7 @@ const EditPost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+
   const [post, setPost] = useState(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -26,6 +28,7 @@ const EditPost = () => {
   useEffect(() => {
     async function fetchPost() {
       setLoading(true);
+
       try {
         const response = await getPostById(id);
         setPost(response.data);
@@ -40,13 +43,22 @@ const EditPost = () => {
     fetchPost();
   }, [id]);
 
-  if (loading) return <CircularProgress />;
-  if (error) return <Alert severity="error">{error}</Alert>;
-  if (!post) return <Typography>Post not found</Typography>;
+  if (loading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    return <Alert severity="error">{error}</Alert>;
+  }
+
+  if (!post) {
+    return <Typography>Post not found</Typography>;
+  }
 
   if (post.author_id !== user?.id) {
     return <Alert severity="error">You can only edit your own posts</Alert>;
   }
+
   if (!user.permissions.includes('edit_posts')) {
     return (
       <Alert severity="error">You do not have permission to edit posts</Alert>
@@ -57,6 +69,7 @@ const EditPost = () => {
     e.preventDefault();
     setSaving(true);
     setError(null);
+
     try {
       await updatePost(id, { title, content });
       toast.success('Post updated successfully!');

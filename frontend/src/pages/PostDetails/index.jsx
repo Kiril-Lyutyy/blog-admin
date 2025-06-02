@@ -1,7 +1,7 @@
 import { Alert, CircularProgress } from '@mui/material';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
-import usePost from '../hooks/usePost';
+import usePost from '../../hooks/usePost';
 import {
   BackButton,
   PostBox,

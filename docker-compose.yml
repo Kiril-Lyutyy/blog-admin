@@ -12,7 +12,7 @@ services:
       - ${MYSQL_PORT_EXPOSE}:${MYSQL_PORT}
     volumes:
       - db_data:/var/lib/mysql
-      - ./init:/docker-entrypoint-initdb.d
+      - ./backend/init:/docker-entrypoint-initdb.d
     networks:
       - app-network
 

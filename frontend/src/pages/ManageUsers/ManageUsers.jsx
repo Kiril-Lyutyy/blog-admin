@@ -100,8 +100,12 @@ const ManageUsers = () => {
     closeDeleteConfirm();
   };
 
-  if (loading) {return <CircularProgress />;}
-  if (error) {return <Alert severity="error">{error}</Alert>;}
+  if (loading) {
+    return <CircularProgress />;
+  }
+  if (error) {
+    return <Alert severity="error">{error}</Alert>;
+  }
 
   return (
     <div>

@@ -13,6 +13,7 @@ import debounce from 'lodash.debounce';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import { INPUT_DEBOUNCE_DELAY } from '../../constants/manageUsers';
 import useManageUsers from '../../hooks/useManageUsers';
 import DeleteDialog from './DeleteDialog';
 import UserFilters from './UserFilters';
@@ -44,7 +45,7 @@ const ManageUsers = () => {
   });
 
   const debouncedSetSearch = useMemo(
-    () => debounce(setSearch, 1000),
+    () => debounce(setSearch, INPUT_DEBOUNCE_DELAY),
     [setSearch],
   );
 
@@ -66,11 +67,13 @@ const ManageUsers = () => {
   };
 
   const handleEmailChange = (id, newEmail) => {
-    const emailError = !newEmail
-      ? 'Email cannot be empty'
-      : !emailRegex.test(newEmail)
-        ? 'Invalid email format'
-        : '';
+    let emailError = '';
+
+    if (!newEmail) {
+      emailError = 'Email cannot be empty';
+    } else if (!emailRegex.test(newEmail)) {
+      emailError = 'Invalid email format';
+    }
 
     setEditableUsers((prev) => ({
       ...prev,
@@ -87,7 +90,7 @@ const ManageUsers = () => {
             toast.error(`Failed to update user email: ${err.message}`),
           );
       }
-    }, 1000);
+    }, INPUT_DEBOUNCE_DELAY);
   };
 
   const openDeleteConfirm = (userId) =>

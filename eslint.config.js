@@ -1,4 +1,5 @@
 import babelParser from '@babel/eslint-parser';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 
 export default [
   {
@@ -15,9 +16,15 @@ export default [
         },
       },
     },
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+    },
     rules: {
       semi: ['error', 'always'],
       quotes: ['error', 'single'],
+      curly: ['error', 'all'],
+      'simple-import-sort/imports': 'warn',
+      'simple-import-sort/exports': 'warn',
     },
   },
   {
@@ -30,9 +37,15 @@ export default [
         requireConfigFile: false,
       },
     },
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+    },
     rules: {
       semi: ['error', 'always'],
       quotes: ['error', 'single'],
+      curly: ['error', 'all'],
+      'simple-import-sort/imports': 'warn',
+      'simple-import-sort/exports': 'warn',
     },
   },
 ];

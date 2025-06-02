@@ -1,32 +1,22 @@
-import { useEffect, useState } from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import { Alert,CircularProgress } from '@mui/material';
+import { Link as RouterLink,useParams } from 'react-router-dom';
 
-import { CircularProgress, Alert } from '@mui/material';
-import usePosts from '../hooks/usePosts';
+import usePost from '../hooks/usePost';
 import {
-  PostBox,
-  PostTitle,
-  PostMeta,
-  PostContent,
   BackButton,
+  PostBox,
+  PostContent,
+  PostMeta,
+  PostTitle,
 } from './styles';
 
 const PostDetails = () => {
   const { id } = useParams();
-  const { fetchPost, loading, error } = usePosts();
-  const [post, setPost] = useState(null);
+  const { post, loading, error } = usePost(id);
 
-  useEffect(() => {
-    async function loadPost() {
-      const data = await fetchPost(id);
-      setPost(data);
-    }
-    loadPost();
-  }, [id, fetchPost]);
-
-  if (loading) return <CircularProgress />;
-  if (error) return <Alert severity="error">{error}</Alert>;
-  if (!post) return <Alert severity="info">Post not found</Alert>;
+  if (loading) {return <CircularProgress />;}
+  if (error) {return <Alert severity="error">{error}</Alert>;}
+  if (!post) {return <Alert severity="info">Post not found</Alert>;}
 
   return (
     <PostBox>

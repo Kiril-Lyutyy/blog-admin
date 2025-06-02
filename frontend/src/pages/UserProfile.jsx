@@ -1,5 +1,6 @@
-import { Typography, Box } from '@mui/material';
-import useAuth from '../hooks/useAuth';
+import { Box,Typography } from '@mui/material';
+
+import { useAuth } from '../context/AuthContext';
 
 const UserProfile = () => {
   const { user } = useAuth();

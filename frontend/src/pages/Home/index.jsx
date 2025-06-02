@@ -1,18 +1,18 @@
+import {
+  Alert,
+  Box,
+  CircularProgress,
+  Pagination,
+  Typography,
+} from '@mui/material';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import {
-  Typography,
-  CircularProgress,
-  Alert,
-  Box,
-  Pagination,
-} from '@mui/material';
-import usePosts from '../../hooks/usePosts';
-import useAuth from '../../hooks/useAuth';
-import { Container } from './styles';
-import SortOrderLimitControls from '../../components/SortOrderLimitControls';
 import PostCard from '../../components/PostCard';
+import SortOrderLimitControls from '../../components/SortOrderLimitControls';
+import { useAuth } from '../../context/AuthContext';
+import usePosts from '../../hooks/usePosts';
+import { Container } from './styles';
 
 const Home = () => {
   const [page, setPage] = useState(1);
@@ -25,21 +25,24 @@ const Home = () => {
     limit,
     sort,
     order,
+    autoFetch: true,
   });
-
   const { user } = useAuth();
 
   const totalPages = Math.max(1, Math.ceil(totalCount / limit));
 
   const handlePageChange = (_, value) => setPage(value);
+
   const handleSortChange = (e) => {
     setSort(e.target.value);
     setPage(1);
   };
+
   const handleOrderChange = (e) => {
     setOrder(e.target.value);
     setPage(1);
   };
+
   const handleLimitChange = (e) => {
     setLimit(e.target.value);
     setPage(1);

@@ -1,16 +1,15 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Navigate,Route, Routes } from 'react-router-dom';
 
+import PageLayout from '../components/PageLayout';
+import RequireAuth from '../components/RequireAuth';
+import CreatePostPage from '../pages/CreatePost';
+import EditPostPage from '../pages/EditPost';
 import Home from '../pages/Home';
-import UserProfilePage from '../pages/UserProfile';
+import LoginPage from '../pages/Login';
 import ManageUsersPage from '../pages/ManageUsers';
 import PostDetailsPage from '../pages/PostDetails';
-import EditPostPage from '../pages/EditPost';
-import LoginPage from '../pages/Login';
 import RegisterPage from '../pages/Register';
-import RequireAuth from '../components/RequireAuth';
-import PageLayout from '../components/PageLayout';
-// TODO mode to page
-import CreatePostPage from '../components/ArticleForm';
+import UserProfilePage from '../pages/UserProfile';
 
 const AppRoutes = () => {
   return (

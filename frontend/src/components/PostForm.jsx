@@ -1,43 +1,61 @@
-import { useState } from 'react';
+import { Box,Button, TextField, Typography } from '@mui/material';
+import { useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Typography, TextField, Button, Box } from '@mui/material';
-import usePosts from '../hooks/usePosts';
-import useAuth from '../hooks/useAuth';
 
-const ArticleForm = () => {
+import { useAuth } from '../context/AuthContext';
+import usePosts from '../hooks/usePosts';
+
+const ArticleForm = ({ initialData = null, isEdit = false, onSubmit }) => {
   const { createPost } = usePosts();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
 
-  const handleSubmit = (e) => {
+  const [title, setTitle] = useState(initialData?.title || '');
+  const [content, setContent] = useState(initialData?.content || '');
+
+  useEffect(() => {
+    if (initialData) {
+      setTitle(initialData.title || '');
+      setContent(initialData.content || '');
+    }
+  }, [initialData]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!user?.id) return alert('Author not found');
+    if (!user?.id) {
+      return alert('Author not found');
+    }
 
-    createPost({
-      title,
-      content,
-      author_id: user.id,
-    })
-      .then(() => {
+    try {
+      if (isEdit && onSubmit) {
+        await onSubmit({ title, content });
+      } else {
+        await createPost({
+          title,
+          content,
+          author_id: user.id,
+        });
         toast.success('Post created successfully!');
         navigate('/', { replace: true });
-      })
-      .catch((err) => {
-        toast.error(`Failed to create post: ${err.message}`);
-      });
+      }
 
-    setTitle('');
-    setContent('');
+      if (!isEdit) {
+        setTitle('');
+        setContent('');
+      }
+    } catch (err) {
+      toast.error(
+        `Failed to ${isEdit ? 'update' : 'create'} post: ${err.message}`,
+      );
+    }
   };
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600 }}>
       <Typography variant="h3" mb={1}>
-        Create / Edit Article
+        {isEdit ? 'Edit Article' : 'Create Article'}
       </Typography>
 
       <TextField

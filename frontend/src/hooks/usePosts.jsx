@@ -1,27 +1,25 @@
-import { useEffect, useState, useCallback } from 'react';
-import {
-  getPosts,
-  getPostById,
-  createPost,
-  updatePost,
-  deletePost,
-} from '../api/postsApi';
+import { useCallback,useEffect, useState } from 'react';
+
+import { deletePost, getPostById, getPosts, updatePost } from '../api/postsApi';
 
 const usePosts = ({
   page = 1,
   limit = 10,
   sort = 'created_at',
   order = 'desc',
+  autoFetch,
 } = {}) => {
   const [posts, setPosts] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(autoFetch);
   const [error, setError] = useState(null);
 
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     setLoading(true);
+
     try {
       const response = await getPosts({ page, limit, sort, order });
+
       setPosts(response.data.posts);
       setTotalCount(response.data.totalCount);
       setError(null);
@@ -30,22 +28,12 @@ const usePosts = ({
     } finally {
       setLoading(false);
     }
-  };
-
-  const fetchPost = useCallback(async (id) => {
-    try {
-      const response = await getPostById(id);
-      return response.data;
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to fetch post');
-      return null;
-    }
-  }, []);
+  }, [page, limit, sort, order]);
 
   const handleCreate = async (data) => {
     try {
       await createPost(data);
-      await fetchPosts();
+      if (autoFetch) {await fetchPosts();}
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create post');
     }
@@ -54,7 +42,7 @@ const usePosts = ({
   const handleUpdate = async (id, data) => {
     try {
       await updatePost(id, data);
-      await fetchPosts();
+      if (autoFetch) {await fetchPosts();}
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update post');
     }
@@ -63,15 +51,17 @@ const usePosts = ({
   const handleDelete = async (id) => {
     try {
       await deletePost(id);
-      await fetchPosts();
+      if (autoFetch) {await fetchPosts();}
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to delete post');
     }
   };
 
   useEffect(() => {
-    fetchPosts();
-  }, [page, limit, sort, order]);
+    if (autoFetch) {
+      fetchPosts();
+    }
+  }, [fetchPosts, autoFetch]);
 
   return {
     posts,
@@ -79,7 +69,6 @@ const usePosts = ({
     loading,
     error,
     refetch: fetchPosts,
-    fetchPost,
     createPost: handleCreate,
     updatePost: handleUpdate,
     deletePost: handleDelete,

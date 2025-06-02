@@ -1,14 +1,14 @@
-import { useForm } from 'react-hook-form';
-import { useNavigate, Link } from 'react-router-dom';
-import { useState } from 'react';
-
 import { Stack, Typography } from '@mui/material';
-import useAuth from '../hooks/useAuth';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link,useNavigate } from 'react-router-dom';
+
 import { login } from '../api/authApi';
 import AuthFormWrapper from '../components/Auth/AuthFormWrapper';
 import AuthTextField from '../components/Auth/AuthTextField';
 import SubmitButton from '../components/Auth/SubmitButton';
 import { emailRules, passwordRules } from '../components/Auth/utils';
+import { useAuth } from '../context/AuthContext';
 
 export default function LoginForm() {
   const {
@@ -55,6 +55,7 @@ export default function LoginForm() {
           label="Password"
           name="password"
           type="password"
+          autocomplete="current-password"
           register={register}
           rules={passwordRules}
           error={errors.password}

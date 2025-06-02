@@ -1,8 +1,9 @@
-import { useForm } from 'react-hook-form';
-import { useNavigate, Link } from 'react-router-dom';
-import { useState } from 'react';
-
 import { Stack, Typography } from '@mui/material';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link,useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import { register as registerUser } from '../api/authApi';
 import AuthFormWrapper from '../components/Auth/AuthFormWrapper';
 import AuthTextField from '../components/Auth/AuthTextField';
@@ -24,6 +25,7 @@ const RegisterForm = () => {
 
     try {
       await registerUser(data);
+      toast.success('Registration successful! You can now log in.');
       navigate('/login');
     } catch (err) {
       const message =

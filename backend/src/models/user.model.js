@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+
 import pool from '../config/db.js';
 import { userRoles } from '../constants/roles.js';
 

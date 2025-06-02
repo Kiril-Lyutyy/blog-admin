@@ -18,8 +18,8 @@ const AuthFormWrapper = ({ title, error, children, onSubmit }) => (
     </Typography>
 
     {error && (
-      <Alert severity="error" sx={{ mb: 2 }}>
-        {error}
+      <Alert severity="error" sx={{ mb: 4 }}>
+        <Typography fontSize={12}>{error}</Typography>
       </Alert>
     )}
 

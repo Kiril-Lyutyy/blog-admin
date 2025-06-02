@@ -1,16 +1,17 @@
 import { v4 as uuidv4 } from 'uuid';
+
+import { getPermissionsByRoleId } from '../models/permission.model.js';
 import {
-  findUserByEmail,
-  createUser,
   comparePasswords,
-  findUserById,
-  saveRefreshToken,
-  findUserIdByRefreshToken,
+  createUser,
   deleteRefreshToken,
+  findUserByEmail,
+  findUserById,
   findUserByIdWithRole,
+  findUserIdByRefreshToken,
+  saveRefreshToken,
 } from '../models/user.model.js';
 import { generateToken } from '../utils/jwt.js';
-import { getPermissionsByRoleId } from '../models/permission.model.js';
 
 export const generateRefreshToken = async () => {
   return uuidv4();
@@ -20,7 +21,9 @@ export const register = async (req, res) => {
   try {
     const { email, password } = req.body;
     const exists = await findUserByEmail(email);
-    if (exists) return res.status(409).json({ message: 'User already exists' });
+    if (exists) {
+      return res.status(409).json({ message: 'User already exists' });
+    }
 
     await createUser(email, password);
     res.status(201).json({ message: 'User registered' });
@@ -84,7 +87,9 @@ export const refresh = async (req, res) => {
   }
 
   const user = await findUserById(userId);
-  if (!user) return res.status(401).json({ message: 'User not found' });
+  if (!user) {
+    return res.status(401).json({ message: 'User not found' });
+  }
 
   await deleteRefreshToken(refreshToken);
 
@@ -116,7 +121,9 @@ export const me = async (req, res) => {
   try {
     const user = await findUserByIdWithRole(req.user.id);
 
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
     const permissions = await getPermissionsByRoleId(user.role_id);
 

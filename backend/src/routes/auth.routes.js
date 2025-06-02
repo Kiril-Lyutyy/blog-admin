@@ -1,5 +1,6 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
+
 import * as authController from '../controllers/auth.controller.js';
 import authMiddleware from '../middleware/auth.middleware.js';
 

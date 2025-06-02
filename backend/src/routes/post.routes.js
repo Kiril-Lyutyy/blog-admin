@@ -1,10 +1,11 @@
 import { Router } from 'express';
+
 import {
-  getPosts,
-  getPostById,
   createPost,
-  updatePost,
   deletePost,
+  getPostById,
+  getPosts,
+  updatePost,
 } from '../controllers/post.controller.js';
 import authMiddleware from '../middleware/auth.middleware.js';
 

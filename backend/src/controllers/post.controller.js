@@ -1,10 +1,10 @@
 import {
+  createPost as createPostModel,
+  deletePostById,
   findAllPosts,
   findPostById,
-  createPost as createPostModel,
-  updatePostById,
-  deletePostById,
   getPostWithAuthorById,
+  updatePostById,
 } from '../models/post.model.js';
 
 export const getPosts = async (req, res) => {
@@ -25,7 +25,9 @@ export const getPosts = async (req, res) => {
 export const getPostById = async (req, res) => {
   try {
     const post = await findPostById(req.params.id);
-    if (!post) return res.status(404).json({ message: 'Post not found' });
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
     res.json(post);
   } catch (err) {
     console.error(err);
@@ -58,7 +60,9 @@ export const updatePost = async (req, res) => {
 
     // Find the post first to check author
     const post = await findPostById(postId);
-    if (!post) return res.status(404).json({ message: 'Post not found' });
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
 
     // Check ownership
     if (post.author_id !== userId) {
@@ -76,8 +80,9 @@ export const updatePost = async (req, res) => {
 
     // Proceed to update
     const updated = await updatePostById(postId, req.body);
-    if (!updated)
+    if (!updated) {
       return res.status(404).json({ message: 'Post not found or not updated' });
+    }
 
     res.json({ message: 'Post updated' });
   } catch (err) {
@@ -89,7 +94,9 @@ export const updatePost = async (req, res) => {
 export const deletePost = async (req, res) => {
   try {
     const deleted = await deletePostById(req.params.id);
-    if (!deleted) return res.status(404).json({ message: 'Post not found' });
+    if (!deleted) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
     res.json({ message: 'Post deleted' });
   } catch (err) {
     console.error(err);

@@ -1,67 +1,141 @@
-# HW-31: A Node.js + MySQL REST API for managing students, courses, and enrollments.
-
 ## Description
 
-RESTful API using Node.js + Express + MySQL. CRUD-operations for students, courses and enrollments.
+Admin Blog — RESTful API using Node.js + Express + MySQL.
+
+Features token-based authentication (JWT + refresh token)
+
+Implements role-based access control (RBAC) with admin, editor, and viewer roles
+
+Provides full CRUD operations for users and posts
 
 ## Tech Stack
 
+BE:
 - Node.js
 - Express.js
 - MySQL
 - Swagger (docs)
 - Docker (optional)
 
+FE:
+- React
+- Docker (optional)
+
 ## Database Schema
-View the schema on dbdiagram.io https://dbdiagram.io/d/Students-Courses-68189e101ca52373f57d9095
+View the schema on dbdiagram.io https://dbdiagram.io/d/683dfb2f61dc3bf08d344bb4
 
 ## Getting Started
 
 1. Clone repo:
 ```bash
-git clone https://github.com/Kiril-Lyutyy/hillel-hw-monorepo.git
-cd hw-31-mysql-student-courses-readme-docs
+git clone https://github.com/Kiril-Lyutyy/blog-admin.git
 ```
 
 2. Create .env in the root folder:
 ```bash
 MYSQL_HOST=db
-MYSQL_DATABASE=online_courses
+MYSQL_DATABASE=admin_blog
 MYSQL_USER=admin
 MYSQL_PASSWORD=admin
 MYSQL_PORT=3306
 MYSQL_PORT_EXPOSE=3307
-PORT=5000
+VITE_API_URL=http://localhost:4000
 ```
-3. Run the project:
+3. Run the project (with hot reload):
 ```bash
-docker-compose up --build
+docker compose up --watch db backend frontend
 ```
+
+4. Run tests
+docker compose run api-test
 
 ## Project Structure
 ```bash
-src/
+backend/
 ├── init/
-├── controllers/
-├── routes/
-├── models/
-├── app.js
-├── server.js
-└── db.js
+├── src/
+├──── config/
+├──── constants/
+├──── controllers/
+├──── middleware/
+├──── models/
+├──── routes/
+├──── utils/
+├──── app.js
+├──── server.js
+├──── swagger.js
+├── tests/
+├──── e2e/
+├──── integration/
+├──── unit/
+├──── utils/
+├── package.json
+├── .dockerignore
+├── .gitignore
+├── .prettierrc
+├── Dockerfile
+├── jest.config
+frontend/
+├── src/
+├──── api/
+├──── components/
+├──── constants/
+├──── context/
+├──── hooks/
+├──── pages/
+├──── routes/
+├──── theme/
+├──── utils/
+├──── App.jsx
+├──── main.jsx
+├── package.json
+├── .dockerignore
+├── .gitignore
+├── .prettierrc
+├── Dockerfile
+├── jest.config
+.editorconfig
+.gitignore
+commitlint.config.cjs
+docker-compose.yml
+package.json
+README.md
+eslint.config.js
 ```
+## Login to the App with predefined users
+Admin
+email: 'admin@example.com'
+password: 'admin123',
+
+Editor
+email: 'editor@example.com'
+password: 'admin123',
+
+Viewer
+email: 'viewer@example.com'
+password: 'admin123',
+
 ## API Documentation
 
-Available at: [http://localhost:5000/api-docs](http://localhost:5000/api-docs)
+Available at: [http://localhost:4000/api-docs](http://localhost:4000/api-docs)
 (Generated with Swagger)
 
-### 9. 📄 Licence
+### 📄 Licence
 
 ```md
 ## License
+```
 
 This project is licensed under the MIT License.
 
 ## Contributing
+
+Use the command below instead of git commit:
+
+```bash
+npm run commit
+```
+This will guide you through a structured commit format and automatically format your code with Prettier and run ESLint checks.
 
 1. Fork the repository
 2. Create your branch: `git checkout -b feature/feature-name`

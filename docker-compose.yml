@@ -1,7 +1,7 @@
 services:
   db:
     image: mysql:8.0
-    container_name: blog-admin-db
+    container_name: admin-blog-db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
@@ -12,36 +12,77 @@ services:
       - ${MYSQL_PORT_EXPOSE}:${MYSQL_PORT}
     volumes:
       - db_data:/var/lib/mysql
-      - ./init:/docker-entrypoint-initdb.d
+      - ./backend/init:/docker-entrypoint-initdb.d
     networks:
-      - backend
+      - app-network
 
-  api:
-    build: .
-    container_name: blog-admin-api
-    restart: always
+  backend:
+    build: ./backend
+    container_name: admin-blog-api
+    command: npm run dev
     ports:
-      - ${PORT}:${PORT}
+      - "4000:4000"
     environment:
-      - NODE_ENV=${NODE_ENV}
       - MYSQL_HOST=db
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_PORT=${MYSQL_PORT}
-      - PORT=${PORT}
+      - PORT=4000
     depends_on:
       - db
+    networks:
+      - app-network
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./backend/package.json
+
+  frontend:
+    build: ./frontend
+    container_name: admin-blog-client
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=${VITE_API_URL}
     volumes:
-      - .:/app
+      - ./frontend:/app
       - /app/node_modules
     networks:
+      - app-network
+    depends_on:
       - backend
-    command: npm start
+
+  api-test:
+    build:
+      context: ./backend
+    container_name: admin-blog-api-test
+    working_dir: /app
+    environment:
+      - NODE_ENV=test
+      - MYSQL_HOST=db
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_PORT=${MYSQL_PORT}
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - db
+    networks:
+      - app-network
+    command: ["npm", "run", "test"]
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   db_data:
-
-networks:
-  backend:
-  

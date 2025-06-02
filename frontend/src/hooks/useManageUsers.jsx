@@ -1,5 +1,4 @@
-import debounce from 'lodash.debounce';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   createUser,
@@ -16,7 +15,7 @@ const useManageUsers = () => {
   const [error, setError] = useState(null);
 
   const [page, setPage] = useState(1);
-  const [search, _setSearch] = useState('');
+  const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
 
   const fetchUsers = async () => {
@@ -41,14 +40,6 @@ const useManageUsers = () => {
   useEffect(() => {
     fetchUsers();
   }, [page, search, roleFilter]);
-
-  const debouncedSetSearch = useMemo(() => debounce(_setSearch, 500), []);
-
-  useEffect(() => {
-    return () => {
-      debouncedSetSearch.cancel();
-    };
-  }, [debouncedSetSearch]);
 
   const handleCreate = async (data) => {
     try {
@@ -92,7 +83,7 @@ const useManageUsers = () => {
     loading,
     error,
     setPage,
-    setSearch: debouncedSetSearch,
+    setSearch,
     setRoleFilter,
     createUser: handleCreate,
     updateUser: handleUpdate,

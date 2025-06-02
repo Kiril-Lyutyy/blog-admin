@@ -1,6 +1,7 @@
 import { Box, Button, Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
 
+import { STRIP_DESC } from '../../constants/posts';
 import {
   ButtonGroup,
   PostBox,
@@ -13,8 +14,8 @@ import { stripHtml } from './utils';
 const PostCard = ({ post, canEdit, onDelete }) => {
   const cleanContent = stripHtml(post.content);
   const preview =
-    cleanContent.length > 120
-      ? cleanContent.slice(0, 120) + '...'
+    cleanContent.length > STRIP_DESC
+      ? cleanContent.slice(0, STRIP_DESC) + '...'
       : cleanContent;
 
   return (
@@ -34,7 +35,7 @@ const PostCard = ({ post, canEdit, onDelete }) => {
 
         <Box display="flex" justifyContent="space-between" flexWrap="wrap">
           <Box>
-            {cleanContent.length > 120 && (
+            {cleanContent.length > STRIP_DESC && (
               <Button
                 component={Link}
                 to={`/posts/${post.id}`}

@@ -39,13 +39,14 @@ MYSQL_USER=admin
 MYSQL_PASSWORD=admin
 MYSQL_PORT=3306
 MYSQL_PORT_EXPOSE=3307
-VITE_API_URL=http://localhost:4000
+VITE_API_URL=http://localhost:5000
 PORT=5000
 ```
 3. Run the project (with hot reload):
 ```bash
 docker compose up --watch db backend frontend
 ```
+The app UI should be available on http://localhost:3000
 
 4. Run tests (db docker container should be running)
 ```bash
@@ -149,4 +150,4 @@ This will guide you through a structured commit format and automatically format 
 
 ## Author
 
-- Kyrylo Liutyi — [LinkedIn](https://www.linkedin.com/in/kyrylo-liutyi-262231161/) — [GitHub](https://github.com/Kiril-  )
+- Kyrylo Liutyi — [LinkedIn](https://www.linkedin.com/in/kyrylo-liutyi-262231161/) — [GitHub](https://github.com/Kiril-Lyutyy)
